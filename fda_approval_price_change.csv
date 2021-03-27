@@ -1,0 +1,52 @@
+company_name,drug,approval_date,ticker,price_change
+AVEO Pharmaceuticals Inc.,Fotivda,3/10/21,AVEO,0.8588807785888075
+BridgeBio Pharma Inc.,Nulibry,2/26/21,BBIO,0.08073394495412844
+Sarepta Therapeutics Inc.,Amondys 45,2/25/21,SRPT,0.019081022021713252
+G1 Therapeutics Inc.,Cosela,2/12/21,GTHX,-0.059951308581862414
+Regeneron Pharmaceuticals Inc.,Evkeeza,2/11/21,REGN,-0.0014046373389247353
+TG Therapeutics Inc.,Ukoniq,2/5/21,TGTX,0.06595995288574794
+Aurinia Pharmaceuticals Inc.,Lupkynis,1/22/21,AUPH,-0.023653088042050012
+Merck & Co. Inc.,Verquvo,1/19/21,RK,
+Urovant Sciences Ltd.,Gemtesa,12/23/20,UROV,-0.000623052959501655
+Myovant Sciences Ltd.,Orgovyx,12/18/20,MYOV,-0.0502815768302494
+Macrogenics Inc.,Margenza,12/16/20,MGNX,-0.0186581976974991
+BioCryst Pharmaceuticals Inc.,Orladeyo,12/3/20,BCRX,-0.0009727626459143762
+Y-mAbs Therapeutics Inc.,Danyelza,11/25/20,YMAB,-0.038884007029877043
+Rhythm Pharmaceuticals Inc.,Imcivree,11/25/20,RYTM,0.02372881355932198
+Alnylam Pharmaceuticals Inc.,Oxlumo,11/23/20,ALNY,-0.01584000000000003
+Eiger BioPharmaceuticals Inc.,Zokinvy,11/20/20,EIGR,-0.024319066147859923
+Gilead Sciences Inc.,Veklury,10/22/20,GILD,0.012516688918558077
+Regeneron Pharmaceuticals Inc.,Inmazeb,10/14/20,REGN,-0.013723365836041728
+Blueprint Medicines Corp.,Gavreto,9/4/20,BPMC,-0.03194168323392971
+Novo Nordisk A/S ADR,Sogroya,8/28/20,NVO,-0.006189613526569997
+Trevena Inc.,Olinvyk,8/7/20,TRVN,-0.13454545454545458
+,Lampit,8/6/20,BAYRY,
+GlaxoSmithKline PLC ADR,Blenrep,8/5/20,GSK,-0.009136811733589866
+MorphoSys US Inc. | MorphoSys AG,Monjuvi,7/31/20,MOR,-0.01137411620043051
+Ultragenyx Pharmaceutical Inc.,Dojolvi,6/30/20,RARE,0.06901735684023502
+Deciphera Pharmaceuticals Inc.,Qinlock,5/15/20,DCPH,0.07299875570302786
+Neurocrine Biosciences Inc.,Ongentys,4/24/20,NBIX,0.022495313476359205
+Incyte Corp.,Pemazyre,4/17/20,INCY,0.02220641209638176
+AstraZeneca PLC ADR,Koselugo,4/10/20,AZN,
+Biohaven Pharmaceutical Holding Co. Ltd.,Nurtec ODT,2/27/20,BHVN,-0.06504809894640395
+Esperion Therapeutics Inc.,Nexletol,2/21/20,ESPR,-0.10049519370812698
+Epizyme Inc.,Tazverik,1/23/20,EPZM,0.025719769673704342
+Blueprint Medicines Corp.,Ayvakit,1/9/20,BPMC,-0.011255199412772227
+,Ubrelvy,12/23/19,AGN,0.005459604178697002
+Intra-Cellular Therapies Inc.,Caplyta,12/20/19,ITCI,-0.01034208432776458
+Sarepta Therapeutics Inc.,Vyondys 53,12/12/19,SRPT,-0.009757539917208702
+Global Blood Therapeutics Inc.,Oxbryta,11/25/19,GBT,0.04807692307692307
+Alnylam Pharmaceuticals Inc.,Givlaari,11/20/19,ALNY,0.10440906307409664
+Vertex Pharmaceuticals Inc.,Trikafta,10/21/19,VRTX,0.03554702928398133
+Eli Lilly & Co.,Reyvow,10/11/19,LLY,0.005661252900232013
+Ardelyx Inc.,Ibsrela,9/12/19,ARDX,0.029508196721311577
+AbbVie Inc.,Rinvoq,8/16/19,ABBV,0.014485907731066113
+Karyopharm Therapeutics Inc.,Xpovio,7/3/19,KPTI,0.3771207430340558
+Palatin Technologies Inc.,Vyleesi,6/21/18,PTN,-0.006342494714587744
+Novartis AG ADR,Piqray,5/24/19,NVS,0.011908891201294961
+AbbVie Inc.,Skyrizi,4/23/19,ABBV,0.006525911708253242
+Amgen Inc.,Evenity,4/9/19,AMGN,-0.00315098920398788
+Novartis AG ADR,Mayzent,3/26/19,NVS,0.0039091389329106215
+Sage Therapeutics Inc.,Zulresso,3/19/19,SAGE,-0.00554246034274068
+Novartis AG ADR,Egaten,2/13/19,NVS,0.0025959367945824377
+Evolus Inc.,Jeuveau,2/1/19,EOLS,0.1109090909090908

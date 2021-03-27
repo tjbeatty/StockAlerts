@@ -1,0 +1,115 @@
+drug,active_ingredient,fda_url,date,fda_name,ticker,company_name,exchange,flag
+Fotivda,tivozanib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212904,3/10/21,aveo pharmaceuticals inc,AVEO,AVEO Pharmaceuticals Inc.,NAS,
+Azstarys,"serdexmethylphenidate and
+dexmethylphenidate",http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212994,3/3/21,commcave therapeutics sa,,,,
+Pepaxto,melphalan flufenamide,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=214383,2/26/21,oncopeptides ab,ONPPF,Oncopeptides AB,OTC,
+Nulibry,fosdenopterin,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=214018,2/26/21,origin biosciences inc,,,,
+Amondys 45,casimersen,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213026,2/25/21,sarepta theraps inc,SRPT,Sarepta Therapeutics Inc.,NAS,
+Cosela,trilacicilib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=214200,2/12/21,g1 therap,GTHX,G1 Therapeutics Inc.,NAS,
+Evkeeza,evinacumab-dgnb,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761181,2/11/21,regeneron pharmaceuticals,REGN,Regeneron Pharmaceuticals Inc.,NAS,
+Ukoniq,umbralisib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213176,2/5/21,tg theraps,TGTX,TG Therapeutics Inc.,NAS,1
+Tepmetko,tepotinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=214096,2/3/21,emd serono inc,,,,
+Lupkynis,voclosporin,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213716,1/22/21,aurinia,IRM,Iron Mountain Inc.,NYS,1
+Cabenuva,cabotegravir and rilpivirine,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212888,1/21/21,viiv hlthcare,,,,
+Verquvo,vericiguat,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=214377,1/19/21,merck sharp dohme,,,,
+Gemtesa,vibegron,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213006,12/23/20,urovant,UROV,Urovant Sciences Ltd.,NAS,1
+Ebanga,ansuvimab-zykl,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761172,12/21/20,ridgeback biotherapeutics,,,,
+Orgovyx,relugolix,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=214621,12/18/20,myovant sciences,MYOV,Myovant Sciences Ltd.,NYS,
+Margenza,margetuximab (anti-HER2 mAb,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761150,12/16/20,macrogenics inc,MGNX,Macrogenics Inc.,NAS,
+Klisyri,tirbanibulin,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213189,12/14/20,almirall,LBTSF,Almirall S.A.,OTC,
+Orladeyo,berotralstat,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=214094,12/3/20,biocryst,BCRX,BioCryst Pharmaceuticals Inc.,NAS,1
+Gallium 68 PSMA-11,Gallium 68 PSMA-11,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212642,12/1/20,univ ca los angeles,,,,
+Danyelza,naxitamab-gqgk,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761171,11/25/20,y-mabs therapeutics inc,YMAB,Y-mAbs Therapeutics Inc.,NAS,
+Imcivree,setmelanotide,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213793,11/25/20,rhythm,RYTM,Rhythm Pharmaceuticals Inc.,NAS,1
+Oxlumo,lumasiran,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=214103,11/23/20,alnylam pharms inc,ALNY,Alnylam Pharmaceuticals Inc.,NAS,
+Zokinvy,lonafarnib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213969,11/20/20,eiger biopharms,EIGR,Eiger BioPharmaceuticals Inc.,NAS,
+Veklury,remdesivir,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=214787,10/22/20,gilead sciences inc,GILD,Gilead Sciences Inc.,NAS,
+Inmazeb,"atoltivimab, maftivimab, and odesivimab-ebgn",http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761169,10/14/20,regeneron pharmaceuticals,REGN,Regeneron Pharmaceuticals Inc.,NAS,
+Gavreto,pralsetinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213721,9/4/20,blueprint medicines,BPMC,Blueprint Medicines Corp.,NAS,
+Detectnet,copper Cu 64 dotatate injection,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213227,9/3/20,radiomedix,,,,
+Sogroya,somapacitan-beco,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761156,8/28/20,novo nordisk inc,NVO,Novo Nordisk A/S ADR,NYS,1
+Winlevi,clascoterone,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213433,8/26/20,cassiopea spa,CPPSF,Cassiopea S.p.A.,OTC,
+Enspryng,satralizumab-mwge,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761149,8/14/20,genentech,CNND,Canandaigua National Corp.,OTC,1
+Viltepso,viltolarsen,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212154,8/12/20,nippon shinyaku,NPPNY,Nippon Shinyaku Co. Ltd. ADR,OTC,1
+Olinvyk,oliceridine,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=210730,8/7/20,trevena,TBPH,Theravance Biopharma Inc.,NAS,1
+Evrysdi,risdiplam,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213535,8/7/20,genentech inc,CNND,Canandaigua National Corp.,OTC,1
+Lampit,nifurtimox,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213464,8/6/20,bayer healthcare,,,,
+Blenrep,belantamab mafodotin-blmf,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761158,8/5/20,glaxosmithkline,GSK,GlaxoSmithKline PLC ADR,NYS,1
+Monjuvi,tafasitamab-cxix,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761163,7/31/20,morphosys us inc,MUSAX,Mirova US Sustainable Equity Fund;A,NAS,1
+Xeglyze,abametapir,https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=206966,7/24/20,dr reddys labs sa,,,,
+Inqovi,decitabine and cedazuridine,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212576,7/7/20,otsuka,WSO,Watsco Inc.,NYS,1
+Rukobia,fostemsavir,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212950,7/2/20,viiv hlthcare,,,,
+Byfavo,remimazolam,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212295,7/2/20,acacia,XOM,Exxon Mobil Corp.,NYS,1
+Dojolvi,triheptanoin,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213687,6/30/20,ultragenyx pharm inc,RARE,Ultragenyx Pharmaceutical Inc.,NAS,
+Zepzelca,lurbinectedin,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213702,6/15/20,jazz,,Dow,"32,778.64",1
+Uplizna,inebilizumab-cdon,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761142,6/11/20,viela bio,PM,Philip Morris International Inc.,NYS,1
+Tauvid,flortaucipir F18,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212123,5/28/20,avid radiopharms inc,,,,
+Artesunate,artesunate,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213036,5/26/20,amivas,AMPH,Amphastar Pharmaceuticals Inc.,NAS,
+Cerianna,fluoroestradiol F18,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212155,5/20/20,zionexa,SNX,SYNNEX Corp.,NYS,1
+Qinlock,ripretinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213973,5/15/20,deciphera pharms,DCPH,Deciphera Pharmaceuticals Inc.,NAS,
+Retevmo,selpercatinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213246,5/8/20,loxo oncology inc,,,,
+Tabrecta,capmatinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213591,5/6/20,novartis pharm,,,,
+Ongentys,opicapone,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212489,4/24/20,neurocrine,NBIX,Neurocrine Biosciences Inc.,NAS,
+Trodelvy,sacituzumab govitecan-hziy,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761115,4/22/20,immunomedics inc,,,,
+Pemazyre,pemigatinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213736,4/17/20,incyte corp,INCY,Incyte Corp.,NAS,
+Tukysa,tucatinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213411,4/17/20,seagen,CI,Cigna Corp.,NYS,1
+Koselugo,selumetinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213756,4/10/20,astrazeneca,AZN,AstraZeneca PLC ADR,NAS,1
+Zeposia,ozanimod,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=209899,3/25/20,celgene intl,,,,
+Isturisa,osilodrostat,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212801,3/6/20,recordati rare,,,,
+Sarclisa,isatuximab,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761113,3/2/20,sanofi aventis us,,,,
+Nurtec ODT,rimegepant,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212728,2/27/20,biohaven pharm,BHVN,Biohaven Pharmaceutical Holding Co. Ltd.,NYS,
+Barhemsys,amisulpride,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=209510,2/26/20,acacia,XOM,Exxon Mobil Corp.,NYS,1
+Vyepti,eptinezumab-jjmr,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761119,2/21/20,"lundbeck seattle biopharmaceuticals, inc.",,,,
+Nexletol,bempedoic acid,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211616,2/21/20,esperion theraps inc,ESPR,Esperion Therapeutics Inc.,NAS,
+Pizensy,lactitol,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211281,2/12/20,braintree labs,,,,
+Tazverik,tazemetostat,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211723,1/23/20,epizyme inc,EPZM,Epizyme Inc.,NAS,1
+Tepezza,teprotumumab-trbw,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761143,1/21/20,horizon therapeutics ireland,,,,
+Ayvakit,avapritinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212608,1/9/20,blueprint medicines,BPMC,Blueprint Medicines Corp.,NAS,
+Ubrelvy,ubrogepant,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211765,12/23/19,allergan,ALJJ,ALJ Regional Holdings Inc.,NAS,
+Enhertu,fam-trastuzumab deruxtecan-nxki,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761139,12/20/19,daiichi sankyo,TCX,Tucows Inc.,NAS,1
+Dayvigo,lemborexant,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212028,12/20/19,eisai inc,USB,U.S. Bancorp,NYS,1
+Caplyta,lumateperone tosylate,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=209500,12/20/19,intra-cellular,ITCI,Intra-Cellular Therapies Inc.,NAS,
+TissueBlue,Brilliant Blue G Ophthalmic Solution,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=209569,12/20/19,dutch ophthalmic,,,,
+Padcev,enfortumab vedotin-ejfv,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761137,12/18/19,astellas,ALPMY,Astellas Pharma Inc. ADR,OTC,1
+Vyondys 53,golodirsen,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211970,12/12/19,sarepta theraps inc,SRPT,Sarepta Therapeutics Inc.,NAS,
+Oxbryta,voxelotor,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213137,11/25/19,global blood theraps,GBT,Global Blood Therapeutics Inc.,NAS,
+Xcopri,cenobamate,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212839,11/21/19,sk life,SKLV,Skye Life Ventures Ltd.,OTC,1
+Givlaari,givosiran,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212194,11/20/19,alnylam pharms inc,ALNY,Alnylam Pharmaceuticals Inc.,NAS,
+Adakveo,crizanlizumab-tmca,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761128,11/15/19,novartis pharms corp,,,,
+Fetroja,cefiderocol,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=209445,11/14/19,shionogi inc,CIEN,Ciena Corp.,NYS,1
+Brukinsa,zanubrutinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=213217,11/14/19,beigene,BKNG,Booking Holdings Inc.,NAS,1
+Reblozyl,luspatercept–aamt,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761136,11/8/19,celgene corp,,,,
+ExEm Foam,air polymer-type A,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212279,11/7/19,giskit,CAS.UT,Cascade Acquisition Corp.,NYS,1
+Trikafta,elexacaftor/ivacaftor/tezacaftor,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212273,10/21/19,vertex pharms inc,VRTX,Vertex Pharmaceuticals Inc.,NAS,
+Reyvow,lasmiditan,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211280,10/11/19,eli lilly and co,LLY,Eli Lilly & Co.,NYS,
+fluorodopa F 18,fluorodopa F 18,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=200655,10/10/19,feinstein,WGMCF,Winston Gold Corp.,OTC,1
+Scenesse,afamelanotide,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=210797,10/8/19,clivunel inc,,,,
+Beovu,brolucizumab–dbll,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761125,10/7/19,novartis pharms corp,,,,
+Aklief,trifarotene,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211527,10/4/19,galderma labs lp,,,,
+Ibsrela,tenapanor,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211801,9/12/19,ardelyx inc,ARDX,Ardelyx Inc.,NAS,
+Nourianz,istradefylline,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=022075,8/27/19,kyowa kirin,GOGR,Go Green Global Technologies Corp.,OTC,1
+Ga-68-DOTATOC,Ga-68-DOTATOC,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=210828,8/21/19,uihc pet imaging,,,,
+Xenleta,lefamulin,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211672,8/19/19,nabriva,NPAUU,New Providence Acquisition Corp. Un,NAS,1
+Rinvoq,upadacitinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211675,8/16/19,abbvie inc,ABBV,AbbVie Inc.,NYS,1
+Inrebic,fedratinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212327,8/16/19,impact,ISVLF,Impact Silver Corp.,OTC,1
+Rozlytrek,entrectinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212725,8/15/19,genentech inc,CNND,Canandaigua National Corp.,OTC,1
+Wakix,pitolisant,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=021115,8/14/19,,,,,
+pretomanid,pretomanid,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212862,8/14/19,mylan ireland ltd,,,,
+Turalio,pexidartinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211810,8/2/19,daiichi sankyo inc,TCX,Tucows Inc.,NAS,1
+Nubeqa,darolutamide,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212099,7/30/19,bayer healthcare,,,,
+Accrufer,ferric maltol,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212320,7/25/19,shield tx,,,,
+Recarbrio,"imipenem, cilastatin and relebactam",http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212819,7/16/19,msd merck co,,,,
+Xpovio,selinexor,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212306,7/3/19,karyopharm theraps,KPTI,Karyopharm Therapeutics Inc.,NAS,
+Vyleesi,bremelanotide,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=210557,6/21/18,palatin technologies,PTN,Palatin Technologies Inc.,ASE,
+Polivy,polatuzumab vedotin-piiq,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761121,6/10/19,genentech,CNND,Canandaigua National Corp.,OTC,1
+Piqray,alpelisib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212526,5/24/19,novartis,NVS,Novartis AG ADR,NYS,1
+Vyndaqel,tafamidis meglumine,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211996,5/3/19,foldrx pharms,,,,
+Skyrizi,risankizumab-rzaa,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761105,4/23/19,abbvie inc,ABBV,AbbVie Inc.,NYS,1
+Balversa,erdafitinib,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=212018,4/12/19,janssen biotech,,,,
+Evenity,romosozumab-aqqg,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761062,4/9/19,amgen inc,AMGN,Amgen Inc.,NAS,1
+Mayzent,siponimod,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=209884,3/26/19,novartis,NVS,Novartis AG ADR,NYS,1
+Sunosi,solriamfetol,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211230,3/20/19,jazz,,Dow,"32,778.64",1
+Zulresso,brexanolone,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=211371,3/19/19,sage therap,SAGE,Sage Therapeutics Inc.,NAS,1
+Egaten,triclabendazole,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=208711,2/13/19,novartis,NVS,Novartis AG ADR,NYS,1
+Cablivi,caplacizumab-yhdp,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761112,2/6/19,ablynx nv,,,,
+Jeuveau,prabotulinumtoxinA-xvfs,http://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=761085,2/1/19,evolus inc,EOLS,Evolus Inc.,NAS,1
