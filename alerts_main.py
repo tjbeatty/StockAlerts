@@ -4,7 +4,7 @@ from mysql_functions import *
 
 
 def send_alert_to_slack(alert):
-    client = slack.WebClient(token='xoxb-181014212021-1852663037783-qbMPpQKosuLUKFV6OTlLipeg')
+    client = slack.WebClient(token='xoxb-181014212021-1852663037783-J5QEPYmiqQwGtfeTi6oe73PZ')
     client.chat_postMessage(channel='business-wire-alerts', type='mrkdwn', text=alert)
 
 

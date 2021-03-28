@@ -12,11 +12,24 @@ from selenium.common.exceptions import TimeoutException
 import time
 
 
+class BusinessWireArticle:
+    def __init__(self, date_text, date, title, ticker, description, url):
+        self.date_text = date_text
+        self.date = date
+        self.title = title
+        self.ticker = ticker
+        self.description = description
+        self.url = url
+
+    def __getitem__(self, item):
+        return item
+
+
 def find_ticker_in_description(description):
     ticker = False
-    if '(nasdaq:' in description.lower() or '(nyse:' in description.lower() \
+    if '(nasdaq:' in description.lower() or '(nyse:' in description.lower() or '(nasdaqgs:' in description.lower()\
             or bool(re.search('\$[a-z]', description.lower())):
-        if '(nasdaq:' in description.lower() or '(nyse:' in description.lower():
+        if '(nasdaq:' in description.lower() or '(nyse:' in description.lower() or '(nasdaqgs:' in description.lower():
             ticker = description.split(':')[1].split(')')[0].replace(' ', '')
         else:
             ticker = description.split('$')[1].split()[0].replace(' ', '')

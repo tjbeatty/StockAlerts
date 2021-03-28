@@ -41,6 +41,31 @@ def get_percent_change_from_date_polygon(ticker, date):
     return percent_change
 
 
+def normalize_date_return_object(date_string):
+    months_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+                   'November', 'December']
+    short_months_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    month_text_in_date = [ele for ele in months_list if (ele in date_string)]
+    short_month_text_in_date = [ele for ele in short_months_list if (ele in date_string)]
+    if month_text_in_date and "," in date_string:
+        date_object = datetime.datetime.strptime(date_string, '%B %d, %Y')
+
+    elif short_month_text_in_date and ',' in date_string:
+        date_object = datetime.datetime.strptime(date_string, '%b %d, %Y')
+
+    elif '-' in date_string or '/' in date_string:
+        if '-' in date_string:
+            date_string = date_string.replace('-', '/')
+        date_list = date_string.split('/')
+        if len(date_list[2]) == 4:
+            date_object = datetime.datetime.strptime(date_string, '%m/%d/%Y')
+        elif len(date_list[2]) == 2:
+            date_object = datetime.datetime.strptime(date_string, '%m/%d/%y')
+
+    if date_object:
+        return date_object
+
+
 def get_daily_response_iex(ticker, date, token='Prod'):
     date_object = datetime.date.today()
     if token.lower() == 'prod':
@@ -48,15 +73,8 @@ def get_daily_response_iex(ticker, date, token='Prod'):
     elif token.lower() == 'sandbox':
         token = 'Tpk_958d6bd4a69346e2bcbee47881694efa'
 
-    if '-' in date:
-        date = date.replace('-', '/')
+    date_object = normalize_date_return_object(date)
 
-    date_list = date.split('/')
-
-    if len(date_list[2]) == 4:
-        date_object = datetime.datetime.strptime(date, '%m/%d/%Y')
-    elif len(date_list[2]) == 2:
-        date_object = datetime.datetime.strptime(date, '%m/%d/%y')
     try:
         date_str = date_object.strftime('%Y%m%d')
         url = 'https://cloud.iexapis.com/stable/stock/' + ticker + '/chart/date/' + date_str + \
@@ -111,4 +129,4 @@ def get_trading_view_url(ticker):
     return url
 
 
-print(get_percent_change_from_date_iex('TSLA', '02/02/2021'))
+# print(get_percent_change_from_date_iex('TSLA', '02/02/2021'))
