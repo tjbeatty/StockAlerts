@@ -1,20 +1,21 @@
 import feedparser
 from pytz import timezone
 from stocks_info import *
-from mysql_functions import *
 import re
-import lxml
-import html5lib
+from selenium.webdriver.common.by import By
+import csv
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-import time
+from selenium.common.exceptions import NoSuchElementException
+import os
+import datetime
+from stocks_info import normalize_date_return_object
 
 
 class BusinessWireArticle:
-    def __init__(self, date_text, date, title, ticker, description, url):
-        self.date_text = date_text
+    def __init__(self, date, title, ticker, description, url):
         self.date = date
         self.title = title
         self.ticker = ticker
@@ -128,36 +129,115 @@ def format_business_wire_alert_for_slack(entry):
     return text
 
 
-def check_table_for_story(ticker, date, title, table_name):
-    connection = create_db_connection()
-    query = 'SELECT ticker, date_time_story_et ' \
-            'FROM ' + table_name + \
-            ' WHERE ticker = "' + ticker + '" AND date = "' + date + '" AND title = "' + title + '"'
-
-    # print(query)
-    result = read_query(connection, query)
-
-    # Will return NONE value if there is no data
-    return result
+def initialize_browser():
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+    browser = webdriver.Chrome(options=options)
+    return browser
 
 
-def add_story_to_table(ticker, date, title, description, date_time, keyword, table_name):
-    connection = create_db_connection()
-    query = 'INSERT INTO ' + table_name + \
-            ' (ticker, date, title, description, date_time_story_et, keyword_hit) VALUES (%s, %s, %s, %s, %s, %s)'
-    values = (ticker, date, title, description, date_time, keyword)
-
-    execute_placeholder_query(connection, query, values)
+def is_english_story(url):
+    if '/en/' in url:
+        return True
+    else:
+        return False
 
 
-def log_rss_ping(matched_stories, alerts_sent, tickers, table_name):
-    connection = create_db_connection()
-    date_time = datetime.datetime.now()
-    query = 'INSERT INTO ' + table_name + \
-            ' (date_time, matched_stories, alerts_sent, tickers) VALUES (%s, %s, %s, %s)'
-    values = (date_time, matched_stories, alerts_sent, tickers)
+def get_stories_from_search_page(url, browser):
+    browser.get(url)
+    timeout = 20
 
-    execute_placeholder_query(connection, query, values)
+    try:
+        # Wait until the bottom image element loads before reading in data.
+        WebDriverWait(browser, timeout). \
+            until(EC.visibility_of_element_located((By.XPATH, '//*[@id="bw-group-all"]/div/div/div[3]/'
+                                                              'section/ul/li[last()]/p')))
+        # Retrieve dates, title, desciption, url from each story
+        date_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/'
+                                                    'ul/li[*]/div[1]/time')
+        title_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/ul/li[*]/h3/a')
+        heading_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/ul/li[*]/p')
+        url_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/ul/li[*]/h3/a')
+
+        # Take text from each object and put in lists
+        date_text = [elem.text for elem in date_elems]
+        title_text = [elem.text for elem in title_elems]
+        heading_text = [elem.text for elem in heading_elems]
+        urls = [elem.get_attribute('href') for elem in url_elems]
+
+        output = []
+        for i, n in enumerate(urls):
+            ticker = find_ticker_in_description(heading_text[i])
+            if is_english_story(urls[i]) and ticker:
+                date = normalize_date_return_object(date_text[i])
+                article_object = BusinessWireArticle(date, title_text[i], ticker,
+                                                                   heading_text[i], urls[i])
+                output.append(article_object)
+
+        return output
+    except TimeoutException:
+        return []
+
+
+def find_min_date_on_search_results_page(url, browser):
+    browser.get(url)
+    timeout = 20
+    try:
+        # Wait until the bottom image element loads before reading in data.
+        WebDriverWait(browser, timeout). \
+            until(EC.visibility_of_element_located((By.XPATH, '//*[@id="bw-group-all"]/div/div/div[3]/section')))
+        # Original path to wait: '//*[@id="bw-group-all"]/div/div/div[3]/section/ul/li[last()]/p')))
+
+        # Retrieve min date from page
+        min_date_text = browser.find_element_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/'
+                                                      'ul/li[last()]/div[1]/time').text
+
+        min_date = normalize_date_return_object(min_date_text)
+
+        return min_date
+    except (TimeoutException, NoSuchElementException):
+        return None
+
+
+def find_story_from_ticker_date(ticker, date_string, browser):
+
+    # Initialize variable to keep it happy
+    min_date_on_page = datetime.datetime.today()
+
+    # Turn date_string into object for comparison
+    date_object_of_event = normalize_date_return_object(date_string)
+    date_object_day_before_event = date_object_of_event + datetime.timedelta(-1)
+
+    url_page = 1
+    same_day_stories = []
+    prev_day_stories = []
+
+    # While the minimum date on the results page is greater than the event, keep paginating
+    while min_date_on_page >= date_object_day_before_event:
+        url = 'https://www.businesswire.com/portal/site/home/search/?searchType=ticker&searchTerm=' \
+              + ticker + '&searchPage=' + str(url_page)
+
+        min_date_on_page = find_min_date_on_search_results_page(url, browser)
+        if min_date_on_page is None:
+            break
+        url_page += 1
+
+        if min_date_on_page <= date_object_day_before_event or min_date_on_page == date_object_of_event:
+            search_page_details = get_stories_from_search_page(url, browser)
+
+            for story in search_page_details:
+                if story.date == date_object_of_event:
+                    print('Same day = ' + story.title)
+                    same_day_stories.append(story)
+
+                if story.date == date_object_of_event + datetime.timedelta(-1):
+                    print('Prev day = ' + story.title)
+                    prev_day_stories.append(story)
+
+    return {'same_day_stories': same_day_stories, 'prev_day_stories': prev_day_stories}
+
+
+
 
 
 

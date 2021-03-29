@@ -6,6 +6,37 @@ from iexfinance.stocks import get_historical_data
 import iexfinance
 
 
+def normalize_date_return_object(date_string):
+    months_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+                   'November', 'December']
+    short_months_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    month_text_in_date = [ele for ele in months_list if (ele in date_string)]
+    short_month_text_in_date = [ele for ele in short_months_list if (ele in date_string)]
+    if month_text_in_date and "," in date_string:
+        date_object = datetime.datetime.strptime(date_string, '%B %d, %Y')
+
+    elif short_month_text_in_date and ',' in date_string:
+        date_object = datetime.datetime.strptime(date_string, '%b %d, %Y')
+
+    elif '-' in date_string or '/' in date_string:
+        if '-' in date_string:
+            date_string = date_string.replace('-', '/')
+        date_list = date_string.split('/')
+        if len(date_list[2]) == 4:
+            date_object = datetime.datetime.strptime(date_string, '%m/%d/%Y')
+        elif len(date_list[2]) == 2:
+            date_object = datetime.datetime.strptime(date_string, '%m/%d/%y')
+
+    if date_object:
+        return date_object
+
+
+def convert_text_date_for_api(date_string):
+    date_object = datetime.datetime.strptime(date_string, '%B %d, %Y')
+    date_out = date_object.strftime('%m/%d/%Y')
+    return date_out
+
+
 def get_daily_response_polygon(ticker, date):
     date_object = datetime.date.today()
 
@@ -39,31 +70,6 @@ def get_percent_change_from_date_polygon(ticker, date):
 
         # print(percent_change)
     return percent_change
-
-
-def normalize_date_return_object(date_string):
-    months_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
-                   'November', 'December']
-    short_months_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    month_text_in_date = [ele for ele in months_list if (ele in date_string)]
-    short_month_text_in_date = [ele for ele in short_months_list if (ele in date_string)]
-    if month_text_in_date and "," in date_string:
-        date_object = datetime.datetime.strptime(date_string, '%B %d, %Y')
-
-    elif short_month_text_in_date and ',' in date_string:
-        date_object = datetime.datetime.strptime(date_string, '%b %d, %Y')
-
-    elif '-' in date_string or '/' in date_string:
-        if '-' in date_string:
-            date_string = date_string.replace('-', '/')
-        date_list = date_string.split('/')
-        if len(date_list[2]) == 4:
-            date_object = datetime.datetime.strptime(date_string, '%m/%d/%Y')
-        elif len(date_list[2]) == 2:
-            date_object = datetime.datetime.strptime(date_string, '%m/%d/%y')
-
-    if date_object:
-        return date_object
 
 
 def get_daily_response_iex(ticker, date, token='Prod'):

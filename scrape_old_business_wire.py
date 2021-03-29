@@ -6,70 +6,82 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import os
 import business_wire
+from business_wire import find_story_from_ticker_date
 import datetime
 import stocks_info
 from time import sleep
 from stocks_info import normalize_date_return_object
 
 
-def convert_text_date_for_api(date_string):
-    date_object = datetime.datetime.strptime(date_string, '%B %d, %Y')
-    date_out = date_object.strftime('%m/%d/%Y')
-    return date_out
+def pull_daily_change_for_all_bus_wire_articles(csv_input, csv_output):
+    header = ['date', 'title', 'description', 'percent_change', 'max_percent_change', 'volume']
+    output = []
+    with open(csv_input, 'r') as csv_in:
+        csv_reader = csv.reader(csv_in)
+        header_throwaway = next(csv_reader)
+        with open(csv_output, 'w') as csv_out:
+            csv_writer = csv.writer(csv_out)
+            csv_writer.writerow(header)
+
+            for row in csv_reader:
+                [date, title, description] = row
+                ticker = business_wire.find_ticker_in_description(description)
+                if ticker:
+                    date_str = stocks_info.convert_text_date_for_api(date)
+                    stock_day_data = stocks_info.get_percent_change_from_date_iex(ticker, date_str)
+                    if stock_day_data:
+                        volume = stock_day_data['volume']
+                        percent_change = stock_day_data['percent_change']
+                        max_percent_change = stock_day_data['max_percent_change']
+                        row.extend([percent_change, max_percent_change, volume])
+                        csv_writer.writerow(row)
 
 
-def initialize_browser():
-    options = webdriver.ChromeOptions()
-    options.add_argument('headless')
-    browser = webdriver.Chrome(options=options)
-    return browser
+def pull_bus_wire_news_stories_ticker_date(csv_input, csv_output):
+    header = ['date', 'ticker', 'pct_change_prev_close', 'day_percent_change',
+              'max_day_percent_change', 'title', 'description', 'url', 'same_or_prev']
+    output = []
 
+    browser = business_wire.initialize_browser()
+    with open(csv_input, 'r') as csv_in:
+        csv_reader = csv.reader(csv_in)
+        header_throwaway = next(csv_reader)
 
-def is_english_story(url):
-    if '/en/' in url:
-        return True
-    else:
-        return False
+        with open(csv_output, 'w') as csv_out:
+            csv_writer = csv.writer(csv_out)
+            csv_writer.writerow(header)
 
+            for row in csv_reader:
+                [date, exchange, ticker, pct_change_previous_close, volume,
+                 day_percent_change, max_day_percent_change] = row
+                print(date, ticker)
 
-def get_stories_from_search_page(url, browser):
-    browser.get(url)
-    timeout = 20
+                stories = find_story_from_ticker_date(ticker, date, browser)
+                same_day_stories = stories['same_day_stories']
+                for story in same_day_stories:
+                    title = story.title
+                    print(title)
+                    description = story.description
+                    url = story.url
+                    same_or_prev = 'same'
+                    row_out = [date, ticker, pct_change_previous_close, day_percent_change,
+                               max_day_percent_change, title, description, url, same_or_prev]
+                    csv_writer.writerow(row_out)
 
-    try:
-        # Wait until the bottom image element loads before reading in data.
-        WebDriverWait(browser, timeout). \
-            until(EC.visibility_of_element_located((By.XPATH, '//*[@id="bw-group-all"]/div/div/div[3]/'
-                                                              'section/ul/li[last()]/p')))
-        # Retrieve dates, title, desciption, url from each story
-        date_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/'
-                                                    'ul/li[*]/div[1]/time')
-        title_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/ul/li[*]/h3/a')
-        heading_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/ul/li[*]/p')
-        url_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/ul/li[*]/h3/a')
-
-        # Take text from each object an dput in lists
-        date_text = [elem.text for elem in date_elems]
-        title_text = [elem.text for elem in title_elems]
-        heading_text = [elem.text for elem in heading_elems]
-        urls = [elem.get_attribute('href') for elem in url_elems]
-
-        output = []
-        for i, n in enumerate(urls):
-            ticker = business_wire.find_ticker_in_description(heading_text[i])
-            if is_english_story(urls[i]) and ticker:
-                date = convert_text_date_for_api(date_text[i])
-                article_object = business_wire.BusinessWireArticle(date_text[i], date, title_text[i], ticker,
-                                                                   heading_text[i], urls[i])
-                output.append(article_object)
-
-        return output
-    except TimeoutException:
-        return []
+                prev_day_stories = stories['prev_day_stories']
+                for story in prev_day_stories:
+                    title = story.title
+                    print(title)
+                    description = story.description
+                    url = story.url
+                    same_or_prev = 'prev'
+                    row_out = [date, ticker, pct_change_previous_close, day_percent_change,
+                               max_day_percent_change, title, description, url, same_or_prev]
+                    csv_writer.writerow(row_out)
 
 
 def old_bus_wire_news_from_search_term(search_term, pages):
-    browser = initialize_browser()
+    browser = business_wire.initialize_browser()
 
     # Initialize the file output (write the header)
     header = ['date', 'ticker', 'title', 'description', 'url']
@@ -88,10 +100,9 @@ def old_bus_wire_news_from_search_term(search_term, pages):
         url = 'https://www.businesswire.com/portal/site/home/search/?searchType=news&searchTerm=' \
               + search_term + '&searchPage=' + str(page)
 
-        search_page_details = get_stories_from_search_page(url, browser)
+        search_page_details = business_wire.get_stories_from_search_page(url, browser)
         with open(csv_name, 'a+') as csvout:
             for story in search_page_details:
-                date_text = story.date_text
                 date = story.date
                 ticker = story.ticker
                 title_text = story.title
@@ -105,78 +116,6 @@ def old_bus_wire_news_from_search_term(search_term, pages):
     browser.quit()
 
 
-def find_min_date_on_page(url, browser):
-    browser.get(url)
-    timeout = 20
+pull_bus_wire_news_stories_ticker_date('daily_stocks_20perc_xnys_xnas.csv', 'daily_stocks_20perc_bus_wire_stories.csv')
 
-# TODO Make sure this works
-    try:
-        # Wait until the bottom image element loads before reading in data.
-        WebDriverWait(browser, timeout). \
-            until(EC.visibility_of_element_located((By.XPATH, '//*[@id="bw-group-all"]/div/div/div[3]/'
-                                                              'section/ul/li[last()]/p')))
-        # Retrieve min date from page
-        min_date_text = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/'
-                                                       'ul/li[last()]/div[1]/time')
-
-        min_date = normalize_date_return_object(min_date_text)
-
-        return min_date
-    except TimeoutException:
-        return ''
-
-
-# TODO still need to implement this
-def find_story_from_ticker_date(ticker, date_string):
-    browser = initialize_browser()
-
-    min_date_on_page = datetime.datetime.today()
-    date_object_of_event = normalize_date_return_object(date_string)
-    url_page = 1
-    while min_date_on_page > date_object_of_event:
-        url = 'https://www.businesswire.com/portal/site/home/search/?searchType=news&searchTerm=' \
-              + ticker + '&searchPage=' + str(url_page)
-        min_date_on_page = find_min_date_on_page(url)
-
-        page_details = get_stories_from_search_page(url, browser)
-        browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/'
-                                       'ul/li[*]/div[1]/time')
-        url_page += 1
-
-
-def pull_daily_change_for_all_bus_wire_articles(csv_input, csv_output):
-    header = ['date', 'title', 'description', 'percent_change', 'max_percent_change', 'volume']
-    output = []
-    with open(csv_input, 'r') as csv_in:
-        csv_reader = csv.reader(csv_in)
-        header_throwaway = next(csv_reader)
-        with open(csv_output, 'w') as csv_out:
-            csv_writer = csv.writer(csv_out)
-            csv_writer.writerow(header)
-
-            for row in csv_reader:
-                [date, title, description] = row
-                ticker = business_wire.find_ticker_in_description(description)
-                if ticker:
-                    date_str = convert_text_date_for_api(date)
-                    stock_day_data = stocks_info.get_percent_change_from_date_iex(ticker, date_str)
-                    if stock_day_data:
-                        volume = stock_day_data['volume']
-                        percent_change = stock_day_data['percent_change']
-                        max_percent_change = stock_day_data['max_percent_change']
-                        row.extend([percent_change, max_percent_change, volume])
-                        csv_writer.writerow(row)
-
-
-# retrieve_old_bus_wire_news('FDA', 2000)
-# pull_daily_change_for_all_bus_wire_articles('fda_test.csv')
-
-
-# pull_daily_change_for_all_bus_wire_articles('FDA_check.csv',
-#                                             'FDA_percent_change2.csv')
-
-
-# browser = initialize_browser()
-# print(get_stories_from_search_page('https://www.businesswire.com/portal/site/home/template.PAGE/search/?searchType=news&searchTerm=FDA&searchPage=1', browser))
-
-old_bus_wire_news_from_search_term('FDA', 1)
+# find_story_from_ticker_date('AVEO', '3/10/2021', browser=business_wire.initialize_browser())
