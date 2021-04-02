@@ -57,7 +57,7 @@ def execute_alert_system(url, keywords, mysql_table):
         if not check_table_for_story(ticker, date, title, mysql_table):
             formatted_alert = format_business_wire_alert_for_slack(story)
             send_alert_to_slack(formatted_alert)
-            print(ticker, date, title, description, date_time, keywords)
+            # print(ticker, date, title, description, date_time, keywords)
             add_story_to_table(ticker, date, title, description, date_time, keyword_matched, mysql_table)
             print("Sent " + ticker + " story from " + date_time + " to Slack")
             alerts_sent += 1

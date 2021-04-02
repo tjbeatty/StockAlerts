@@ -28,14 +28,21 @@ class BusinessWireArticle:
 
 def find_ticker_in_description(description):
     ticker = False
-    if '(nasdaq:' in description.lower() or '(nyse:' in description.lower() or '(nasdaqgs:' in description.lower()\
-            or bool(re.search('\$[a-z]', description.lower())):
-        if '(nasdaq:' in description.lower() or '(nyse:' in description.lower() or '(nasdaqgs:' in description.lower():
-            ticker = description.split(':')[1].split(')')[0].replace(' ', '')
-        else:
-            ticker = description.split('$')[1].split()[0].replace(' ', '')
+    first_split = ''
+    if '(nasdaq:' in description.lower():
+        first_split = description.lower().split('nasdaq:')[1]
+    elif '(nyse:' in description.lower():
+        first_split = description.lower().split('nyse:')[1]
+    elif '(nasdaqgs:' in description.lower():
+        first_split = description.lower().split('nasdaqgs:')[1]
+    elif bool(re.search('\$[a-z]', description.lower())):
+        ticker = description.lower().split('$')[1].split()[0].replace(' ', '').upper()
     else:
         ticker = False
+
+    if first_split != '':
+        replace_spaces = first_split.replace(' ', '')
+        ticker = re.split('[^a-z]', replace_spaces)[0].upper()
 
     return ticker
 
@@ -235,9 +242,6 @@ def find_story_from_ticker_date(ticker, date_string, browser):
                     prev_day_stories.append(story)
 
     return {'same_day_stories': same_day_stories, 'prev_day_stories': prev_day_stories}
-
-
-
 
 
 

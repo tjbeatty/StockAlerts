@@ -116,6 +116,7 @@ def old_bus_wire_news_from_search_term(search_term, pages):
     browser.quit()
 
 
-pull_bus_wire_news_stories_ticker_date('daily_stocks_20perc_xnys_xnas.csv', 'daily_stocks_20perc_bus_wire_stories.csv')
+pull_bus_wire_news_stories_ticker_date('daily_stocks_20perc_loss2.csv',
+                                       'daily_stocks_20perc_loss2_bw_stories.csv')
 
 # find_story_from_ticker_date('AVEO', '3/10/2021', browser=business_wire.initialize_browser())
