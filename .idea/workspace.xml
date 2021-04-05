@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="10f3cb01-cb5c-4f18-b34f-b8e873b14699" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/globe_newswire.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alerts_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/alerts_main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_wire.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daily_stocks_20perc_bus_wire_stories.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/daily_stocks_20perc_xnys_xnas.csv" beforeDir="false" afterPath="$PROJECT_DIR$/daily_stocks_20perc_xnys_xnas.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrape_old_business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrape_old_business_wire.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +33,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RunManager" selected="Python.alerts_main">
     <configuration name="alerts_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -72,6 +70,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/business_wire.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="globe_newswire" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="FDAApprovals" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/globe_newswire.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -146,6 +165,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.alerts_main" />
+        <item itemvalue="Python.globe_newswire" />
         <item itemvalue="Python.business_wire" />
         <item itemvalue="Python.scratch" />
         <item itemvalue="Python.mysql_functions" />
@@ -185,13 +205,21 @@
       <option name="project" value="LOCAL" />
       <updated>1617053863944</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Re-worked ticker detector to account for edge case discovered in the wild.">
+      <created>1617389158312</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1617389158312</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Refactored code to use BusinessWireArticle objects. Added code to normalize dates. Still need to enable finding articles on a specific date. Work has begun but not finished." />
     <MESSAGE value="Consolidated core Business Wire methods to one file. Added ability to find articles on Business Wire by a specific ticker and date." />
     <MESSAGE value="Adding output files from analysis to project." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding output files from analysis to project." />
+    <MESSAGE value="Re-worked ticker detector to account for edge case discovered in the wild." />
+    <option name="LAST_COMMIT_MESSAGE" value="Re-worked ticker detector to account for edge case discovered in the wild." />
   </component>
 </project>
