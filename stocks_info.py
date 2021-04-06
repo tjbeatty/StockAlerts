@@ -10,10 +10,16 @@ def normalize_date_return_object(date_string):
     months_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
                    'November', 'December']
     short_months_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    timezones = ['ET', 'CT', 'MT', 'PT', 'EDT', 'CDT', 'MDT', 'PDT', 'EST', 'CST', 'MST', 'PST']
     month_text_in_date = [ele for ele in months_list if (ele in date_string)]
     short_month_text_in_date = [ele for ele in short_months_list if (ele in date_string)]
+    timezone_text_in_date = [ele for ele in timezones if (ele in date_string)]
     if month_text_in_date and "," in date_string:
-        date_object = datetime.datetime.strptime(date_string, '%B %d, %Y')
+        if ':' in date_string:
+            date_string = date_string[0:date_string.index(':') + 3]
+            date_object = datetime.datetime.strptime(date_string, '%B %d, %Y %H:%M')
+        else:
+            date_object = datetime.datetime.strptime(date_string, '%B %d, %Y')
 
     elif short_month_text_in_date and ',' in date_string:
         date_object = datetime.datetime.strptime(date_string, '%b %d, %Y')
@@ -24,7 +30,9 @@ def normalize_date_return_object(date_string):
         date_list = date_string.split('/')
         if len(date_list[2]) == 4:
             date_object = datetime.datetime.strptime(date_string, '%m/%d/%Y')
-        elif len(date_list[2]) == 2:
+        elif len(date_list[0]) == 4:
+            date_object = datetime.datetime.strptime(date_string, '%Y/%m/%d')
+        else:
             date_object = datetime.datetime.strptime(date_string, '%m/%d/%y')
 
     if date_object:

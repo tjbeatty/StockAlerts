@@ -78,34 +78,6 @@ def ping_gnw_rss_news_feed(url):
     return output
 
 
-# def filter_gnw_rss_news_feed_with_keyword(url, keywords):
-#     """
-#     :param url: rss url to ping
-#     :param keywords: keyword or sequential words ("word or words"),
-#     or a list of keywords or sequential to search news story against (["word or words 1, "word or words 2"...])
-#     :return: dictionary containing ticker, title, article description, datetime or article (PT), link to article, date,
-#     datetime or article (exchange time)
-#     """
-#
-#     news_stories = ping_gnw_rss_news_feed(url)
-#     output = []
-#     for entry in news_stories:
-#         description = entry['description']
-#         ticker = get_ticker(description)
-#         if ticker:
-#             if type(keywords) == list:
-#                 for keyword in keywords:
-#                     if keyword in description:
-#                         entry['keyword_matched'] = keyword
-#                         output.append(entry)
-#             elif type(keywords) == str:
-#                 if keywords in description:
-#                     entry['keyword_matched'] = keywords
-#                     output.append(entry)
-#
-#     return output
-
-
 def filter_gnw_news_feed_with_nonsequential_keywords(url, keywords):
     news_stories = ping_gnw_rss_news_feed(url)
     output = []
@@ -123,25 +95,6 @@ def filter_gnw_news_feed_with_nonsequential_keywords(url, keywords):
     return output
 
 
-# def format_gnw_alert_for_slack(entry):
-#     title = entry['title']
-#     description = entry['description']
-#     date_time = entry['date_time']
-#     link = entry['link']
-#     ticker = entry['ticker']
-#     trading_view_url = get_trading_view_url(ticker)
-#
-#     text = '<!here> \n'
-#     text += '*Date/Time:* `' + date_time + '`\n'
-#     text += '*Title:* `' + title + '`\n'
-#     text += '*Ticker:* ' + ticker + '\n'
-#     text += '*Description:* ```' + description + '```\n'
-#     text += '*News Link:* ' + link + '\n'
-#     text += '*TV Link:* ' + trading_view_url
-#
-#     return text
-
-
 def initialize_browser():
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
@@ -149,10 +102,37 @@ def initialize_browser():
     return browser
 
 
-def is_english_story(url):
-    if '/en/' in url:
-        return True
-    else:
+def check_for_no_stories(url, browser):
+    browser.get(url)
+    timeout = 20
+
+    try:
+        no_stories = browser.find_element_by_xpath('/html/body/div[1]/div[2]/div/p').text
+        if 'No articles were found' in no_stories:
+            return True
+        else:
+            return False
+    except NoSuchElementException:
+        return False
+
+
+def check_for_next_page_button(url, browser):
+    browser.get(url)
+    timeout = 20
+    try:
+        # Wait until it all loads before reading in data.
+        WebDriverWait(browser, timeout). \
+            until(EC.visibility_of_element_located((By.XPATH, '/html/body/div/div[2]/div/div[*]/div/div[2]/a')))
+
+        # Retrieve min date from page
+        next_page_text = browser.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[13]/div[3]/a/span[1]').text
+        print(next_page_text)
+        if next_page_text:
+            return True
+        else:
+            return False
+
+    except (TimeoutException, NoSuchElementException) as e:
         return False
 
 
@@ -161,16 +141,17 @@ def get_stories_from_search_page(url, browser):
     timeout = 20
 
     try:
+        if check_for_no_stories(url, browser):
+            return []
+
         # Wait until the bottom image element loads before reading in data.
         WebDriverWait(browser, timeout). \
-            until(EC.visibility_of_element_located((By.XPATH, '//*[@id="bw-group-all"]/div/div/div[3]/'
-                                                              'section/ul/li[last()]/p')))
-        # Retrieve dates, title, desciption, url from each story
-        date_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/'
-                                                    'ul/li[*]/div[1]/time')
-        title_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/ul/li[*]/h3/a')
-        heading_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/ul/li[*]/p')
-        url_elems = browser.find_elements_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/ul/li[*]/h3/a')
+            until(EC.visibility_of_element_located((By.XPATH, '/html/body/div/div[2]/div/div[*]/div/div[2]/a')))
+        # Retrieve dates, title, desrciption, url from each story
+        date_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[*]/div/div[2]/div/span[1]')
+        title_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[*]/div/div[2]/a')
+        heading_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[*]/div/div[2]/span')
+        url_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[*]/div/div[2]/a')
 
         # Take text from each object and put in lists
         date_text = [elem.text for elem in date_elems]
@@ -181,10 +162,9 @@ def get_stories_from_search_page(url, browser):
         output = []
         for i, n in enumerate(urls):
             ticker = get_ticker(heading_text[i])
-            if is_english_story(urls[i]) and ticker:
+            if ticker:
                 date = normalize_date_return_object(date_text[i])
-                article_object = GlobeNewswireArticle(date, title_text[i], ticker,
-                                                                   heading_text[i], urls[i])
+                article_object = GlobeNewswireArticle(date, title_text[i], ticker, heading_text[i], urls[i])
                 output.append(article_object)
 
         return output
@@ -192,59 +172,54 @@ def get_stories_from_search_page(url, browser):
         return []
 
 
-def find_min_date_on_search_results_page(url, browser):
-    browser.get(url)
-    timeout = 20
-    try:
-        # Wait until the bottom image element loads before reading in data.
-        WebDriverWait(browser, timeout). \
-            until(EC.visibility_of_element_located((By.XPATH, '//*[@id="bw-group-all"]/div/div/div[3]/section')))
-        # Original path to wait: '//*[@id="bw-group-all"]/div/div/div[3]/section/ul/li[last()]/p')))
-
-        # Retrieve min date from page
-        min_date_text = browser.find_element_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/'
-                                                      'ul/li[last()]/div[1]/time').text
-
-        min_date = normalize_date_return_object(min_date_text)
-
-        return min_date
-    except (TimeoutException, NoSuchElementException):
-        return None
-
-
 def find_story_from_ticker_date(ticker, date_string, browser):
 
-    # Initialize variable to keep it happy
-    min_date_on_page = datetime.datetime.today()
-
     # Turn date_string into object for comparison
-    date_object_of_event = normalize_date_return_object(date_string)
-    date_object_day_before_event = date_object_of_event + datetime.timedelta(-1)
+    date_object = normalize_date_return_object(date_string)
+    date_of_event_str = date_object.strftime('%Y-%m-%d')
 
     url_page = 1
+    all_stories = []
+    next_page_button = True
+    # While the there is a "Next Page" button on the page, keep paginating
+    while next_page_button:
+        url = 'https://www.globenewswire.com/search/lang/en/exchange/nyse,nasdaq/date/[' + date_of_event_str + \
+              '%2520TO%2520' + date_of_event_str + ']/keyword/' + ticker + '?page=' + str(url_page)
+
+        if check_for_no_stories(url, browser):
+            return []
+
+        next_page_button = check_for_next_page_button(url, browser)
+        search_page_details = get_stories_from_search_page(url, browser)
+
+        for story in search_page_details:
+            if get_ticker(story.description) == ticker:
+                all_stories.append(story)
+
+        url_page += 1
+
+    return all_stories
+
+
+def find_story_from_ticker_two_days(ticker, date_string, browser):
+    date_object = normalize_date_return_object(date_string)
+    date_str = date_object.strftime('%Y-%m-%d')
+    day_before_obj = date_object + datetime.timedelta(-1)
+    day_before_str = day_before_obj.strftime('%Y-%m-%d')
+    dates = [day_before_str, date_str]
     same_day_stories = []
     prev_day_stories = []
 
-    # While the minimum date on the results page is greater than the event, keep paginating
-    while min_date_on_page >= date_object_day_before_event:
-        url = 'https://www.businesswire.com/portal/site/home/search/?searchType=ticker&searchTerm=' \
-              + ticker + '&searchPage=' + str(url_page)
+    for date in dates:
+        stories = find_story_from_ticker_date(ticker, date, browser)
 
-        min_date_on_page = find_min_date_on_search_results_page(url, browser)
-        if min_date_on_page is None:
-            break
-        url_page += 1
+        for story in stories:
+            if story.date.date() == date_object.date():
+                print('Same day = ' + story.title)
+                same_day_stories.append(story)
 
-        if min_date_on_page <= date_object_day_before_event or min_date_on_page == date_object_of_event:
-            search_page_details = get_stories_from_search_page(url, browser)
-
-            for story in search_page_details:
-                if story.date == date_object_of_event:
-                    print('Same day = ' + story.title)
-                    same_day_stories.append(story)
-
-                if story.date == date_object_of_event + datetime.timedelta(-1):
-                    print('Prev day = ' + story.title)
-                    prev_day_stories.append(story)
+            if story.date.date() == day_before_obj.date():
+                print('Prev day = ' + story.title)
+                prev_day_stories.append(story)
 
     return {'same_day_stories': same_day_stories, 'prev_day_stories': prev_day_stories}

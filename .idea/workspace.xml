@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="10f3cb01-cb5c-4f18-b34f-b8e873b14699" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/globe_newswire.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scrape_old_gnw.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alerts_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/alerts_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_wire.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/globe_newswire.py" beforeDir="false" afterPath="$PROJECT_DIR$/globe_newswire.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stocks_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/stocks_info.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +35,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.alerts_main">
+  <component name="RunManager" selected="Python.globe_newswire">
     <configuration name="alerts_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="FDAApprovals" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -164,8 +164,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.alerts_main" />
         <item itemvalue="Python.globe_newswire" />
+        <item itemvalue="Python.alerts_main" />
         <item itemvalue="Python.business_wire" />
         <item itemvalue="Python.scratch" />
         <item itemvalue="Python.mysql_functions" />
@@ -212,7 +212,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617389158312</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Consolidated some methods for Business Wire and Globe Newswire. Still need to delete old code.">
+      <created>1617602977913</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1617602977913</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -220,6 +227,7 @@
     <MESSAGE value="Consolidated core Business Wire methods to one file. Added ability to find articles on Business Wire by a specific ticker and date." />
     <MESSAGE value="Adding output files from analysis to project." />
     <MESSAGE value="Re-worked ticker detector to account for edge case discovered in the wild." />
-    <option name="LAST_COMMIT_MESSAGE" value="Re-worked ticker detector to account for edge case discovered in the wild." />
+    <MESSAGE value="Consolidated some methods for Business Wire and Globe Newswire. Still need to delete old code." />
+    <option name="LAST_COMMIT_MESSAGE" value="Consolidated some methods for Business Wire and Globe Newswire. Still need to delete old code." />
   </component>
 </project>
