@@ -25,7 +25,7 @@ def pull_daily_change_for_all_bus_wire_articles(csv_input, csv_output):
 
             for row in csv_reader:
                 [date, title, description] = row
-                ticker = business_wire.find_ticker_in_description(description)
+                ticker = business_wire.get_ticker_from_description(description)
                 if ticker:
                     date_str = stocks_info.convert_text_date_for_api(date)
                     stock_day_data = stocks_info.get_percent_change_from_date_iex(ticker, date_str)
@@ -57,6 +57,7 @@ def pull_bus_wire_news_stories_ticker_date(csv_input, csv_output):
                 print(date, ticker)
 
                 stories = find_story_from_ticker_date(ticker, date, browser)
+                print(stories)
                 same_day_stories = stories['same_day_stories']
                 for story in same_day_stories:
                     title = story.title
@@ -116,7 +117,5 @@ def old_bus_wire_news_from_search_term(search_term, pages):
     browser.quit()
 
 
-pull_bus_wire_news_stories_ticker_date('daily_stocks_20perc_loss2.csv',
-                                       'daily_stocks_20perc_loss2_bw_stories.csv')
 
 # find_story_from_ticker_date('AVEO', '3/10/2021', browser=business_wire.initialize_browser())

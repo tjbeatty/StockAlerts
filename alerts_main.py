@@ -2,6 +2,18 @@ import slack
 from business_wire import *
 from mysql_functions import *
 from globe_newswire import *
+import csv
+
+
+def import_keywords(file_in):
+    keywords = []
+    with open(file_in, 'r') as csv_in:
+        csv_reader = csv.reader(csv_in)
+        header_throwaway = next(csv_reader)
+        for row in csv_reader:
+            keywords.append(row[0])
+
+    return keywords
 
 
 def check_table_for_story(ticker, date, title, source, table_name):
@@ -82,7 +94,7 @@ def filter_rss_news_feed_with_keyword(url, keywords):
     output = []
     for entry in news_stories:
         description = entry['description']
-        ticker = find_ticker_in_description(description)
+        ticker = get_ticker_from_description(description)
         if ticker:
             if type(keywords) == list:
                 for keyword in keywords:
@@ -127,9 +139,33 @@ def execute_alert_system(url, keywords, mysql_table):
     log_rss_ping(match_count, alerts_sent, tickers, 'rss_pings')
 
 
+keywords = import_keywords('keywords.csv')
 fda_phrases = ['FDA', 'Phase 0', 'Phase 1', 'Phase 2', 'Phase 3', 'Phase I', 'Phase II', 'Phase III']
-execute_alert_system('https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEVlZWA==', fda_phrases,
-                     'story_alerts')
-execute_alert_system('https://www.globenewswire.com/RssFeed/orgclass/1/feedTitle/'
-                     'GlobeNewswire%20-%20News%20about%20Public%20Companies', fda_phrases,
-                     'story_alerts')
+financial_words = ['sales results', 'financials', 'letter to stakeholders', 'provides update', 'business update',
+                   'financial results']
+
+gnw_public_company_rss = 'https://www.globenewswire.com/RssFeed/orgclass/1/feedTitle/GlobeNewswire%20-%20' \
+                         'News%20about%20Public%20Companies'
+bw_tech_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEFpQWg=='
+bw_health_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEVlZWA=='
+bw_energy_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEFpQXw=='
+bw_defense_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeGVpZWQ=='
+bw_science_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeGVtXWQ=='
+bw_auto_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEVlZXw=='
+bw_comms_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEFpRVQ=='
+bw_construction_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEFpRVA=='
+bw_manufacturing_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEFpTXA=='
+bw_public_policy_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEFpQWQ=='
+bw_retail_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEF5XWQ=='
+bw_trade_show_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEFxXVA=='
+bw_transport_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEFpQVQ=='
+bw_travel_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEVlZWQ=='
+bw_vc_rss = 'https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJdEVhZXw=='
+
+
+rss_feeds = [gnw_public_company_rss, bw_tech_rss, bw_energy_rss, bw_defense_rss, bw_health_rss, bw_science_rss,
+             bw_auto_rss, bw_comms_rss, bw_construction_rss, bw_manufacturing_rss, bw_public_policy_rss, bw_retail_rss,
+             bw_trade_show_rss, bw_transport_rss, bw_travel_rss, bw_vc_rss]
+
+for feed in rss_feeds:
+    execute_alert_system(feed, keywords, 'story_alerts')

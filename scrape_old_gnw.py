@@ -1,16 +1,11 @@
-from selenium.webdriver.common.by import By
 import csv
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
 import os
 import globe_newswire
-from globe_newswire import find_story_from_ticker_date
-import datetime
+from globe_newswire import find_story_from_ticker_two_days
 import stocks_info
 from time import sleep
 from stocks_info import normalize_date_return_object
+from stocks_info import get_ticker_from_description
 
 
 def pull_daily_change_for_all_gnw_articles(csv_input, csv_output):
@@ -25,7 +20,7 @@ def pull_daily_change_for_all_gnw_articles(csv_input, csv_output):
 
             for row in csv_reader:
                 [date, title, description] = row
-                ticker = globe_newswire.find_ticker_in_description(description)
+                ticker = get_ticker_from_description(description)
                 if ticker:
                     date_str = stocks_info.convert_text_date_for_api(date)
                     stock_day_data = stocks_info.get_percent_change_from_date_iex(ticker, date_str)
@@ -54,13 +49,22 @@ def pull_gnw_stories_ticker_date(csv_input, csv_output):
             for row in csv_reader:
                 [date, exchange, ticker, pct_change_previous_close, volume,
                  day_percent_change, max_day_percent_change] = row
+
+                date = date.replace(' ', '')
+                exchange = exchange.replace(' ', '')
+                ticker = ticker.replace(' ', '')
+
+                if exchange.lower().replace(' ', '') == 'xnas':
+                    exchange_long = 'nasdaq'
+                elif exchange.lower().replace(' ', '') == 'xnys':
+                    exchange_long = 'nyse'
+
                 print(date, ticker)
 
-                stories = find_story_from_ticker_date(ticker, date, browser)
+                stories = find_story_from_ticker_two_days(ticker, date, browser, exchange_long)
                 same_day_stories = stories['same_day_stories']
                 for story in same_day_stories:
                     title = story.title
-                    print(title)
                     description = story.description
                     url = story.url
                     same_or_prev = 'same'
@@ -71,7 +75,6 @@ def pull_gnw_stories_ticker_date(csv_input, csv_output):
                 prev_day_stories = stories['prev_day_stories']
                 for story in prev_day_stories:
                     title = story.title
-                    print(title)
                     description = story.description
                     url = story.url
                     same_or_prev = 'prev'
@@ -85,7 +88,7 @@ def old_gnw_news_from_search_term(search_term, pages):
 
     # Initialize the file output (write the header)
     header = ['date', 'ticker', 'title', 'description', 'url']
-    csv_name = search_term + '_historical_business_wire_stories.csv'
+    csv_name = search_term + '_historical_gnw_stories.csv'
 
     # Remove file if it already exists
     if os.path.exists(csv_name):
@@ -97,8 +100,8 @@ def old_gnw_news_from_search_term(search_term, pages):
 
     for page in range(1, pages+1):
         print("Now on page #" + str(page) + "...")
-        url = 'https://www.businesswire.com/portal/site/home/search/?searchType=news&searchTerm=' \
-              + search_term + '&searchPage=' + str(page)
+        url = 'https://www.globenewswire.com/search/lang/en/exchange/nyse,nasdaq/keyword/' \
+              + search_term + '?page=' + str(page)
 
         search_page_details = globe_newswire.get_stories_from_search_page(url, browser)
         with open(csv_name, 'a+') as csvout:
@@ -116,7 +119,4 @@ def old_gnw_news_from_search_term(search_term, pages):
     browser.quit()
 
 
-pull_gnw_stories_ticker_date('daily_stocks_20perc_loss2.csv',
-                                       'daily_stocks_20perc_loss2_bw_stories.csv')
-
-# find_story_from_ticker_date('AVEO', '3/10/2021', browser=business_wire.initialize_browser())
+pull_gnw_stories_ticker_date('daily_stocks_20perc_xnys_xnas_2.csv', 'daily_stocks_20perc_gnw_stories_2.csv')

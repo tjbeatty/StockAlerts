@@ -12,6 +12,7 @@ from selenium.common.exceptions import NoSuchElementException
 import os
 import datetime
 from stocks_info import normalize_date_return_object
+from stocks_info import get_ticker_from_description
 
 
 class BusinessWireArticle:
@@ -26,33 +27,12 @@ class BusinessWireArticle:
         return item
 
 
-def find_ticker_in_description(description):
-    ticker = False
-    first_split = ''
-    if '(nasdaq:' in description.lower():
-        first_split = description.lower().split('nasdaq:')[1]
-    elif '(nyse:' in description.lower():
-        first_split = description.lower().split('nyse:')[1]
-    elif '(nasdaqgs:' in description.lower():
-        first_split = description.lower().split('nasdaqgs:')[1]
-    elif bool(re.search('\$[a-z]', description.lower())):
-        ticker = description.lower().split('$')[1].split()[0].replace(' ', '').upper()
-    else:
-        ticker = False
-
-    if first_split != '':
-        replace_spaces = first_split.replace(' ', '')
-        ticker = re.split('[^a-z]', replace_spaces)[0].upper()
-
-    return ticker
-
-
 def ping_bus_wire_rss_news_feed(url):
     feed = feedparser.parse(url)
     output = []
     for entry in feed.entries:
         description = entry.description
-        ticker = find_ticker_in_description(description)
+        ticker = get_ticker_from_description(description)
 
         if ticker:
             date_time_utc = entry.published + 'C'
@@ -66,38 +46,11 @@ def ping_bus_wire_rss_news_feed(url):
 
             title = entry.title
             link = entry.link
-            output.append({'ticker': ticker, 'title': title, 'description': description, 'date_time': date_time_pt,
-                           'link': link, 'date': date, 'date_time_sql': date_time_sql, 'source': 'Business Wire'})
+            if is_english_story(link):
+                output.append({'ticker': ticker, 'title': title, 'description': description, 'date_time': date_time_pt,
+                               'link': link, 'date': date, 'date_time_sql': date_time_sql, 'source': 'Business Wire'})
 
     return output
-
-
-# def filter_bus_wire_rss_news_feed_with_keyword(url, keywords):
-#     """
-#     :param url: rss url to ping
-#     :param keywords: keyword or sequential words ("word or words"),
-#     or a list of keywords or sequential to search news story against (["word or words 1, "word or words 2"...])
-#     :return: dictionary containing ticker, title, article description, datetime or article (PT), link to article, date,
-#     datetime or article (exchange time)
-#     """
-#
-#     news_stories = ping_bus_wire_rss_news_feed(url)
-#     output = []
-#     for entry in news_stories:
-#         description = entry['description']
-#         ticker = find_ticker_in_description(description)
-#         if ticker:
-#             if type(keywords) == list:
-#                 for keyword in keywords:
-#                     if keyword in description:
-#                         entry['keyword_matched'] = keyword
-#                         output.append(entry)
-#             elif type(keywords) == str:
-#                 if keywords in description:
-#                     entry['keyword_matched'] = keywords
-#                     output.append(entry)
-#
-#     return output
 
 
 def filter_bus_wire_news_feed_with_nonsequential_keywords(url, keywords):
@@ -105,7 +58,7 @@ def filter_bus_wire_news_feed_with_nonsequential_keywords(url, keywords):
     output = []
     for entry in news_stories:
         description = entry['description']
-        ticker = find_ticker_in_description(description)
+        ticker = get_ticker_from_description(description)
         if ticker:
             for keyword in keywords:
                 if keyword in description and keyword == keywords[-1]:
@@ -115,25 +68,6 @@ def filter_bus_wire_news_feed_with_nonsequential_keywords(url, keywords):
                     break
 
     return output
-
-
-# def format_business_wire_alert_for_slack(entry):
-#     title = entry['title']
-#     description = entry['description']
-#     date_time = entry['date_time']
-#     link = entry['link']
-#     ticker = entry['ticker']
-#     trading_view_url = get_trading_view_url(ticker)
-#
-#     text = '<!here> \n'
-#     text += '*Date/Time:* `' + date_time + '`\n'
-#     text += '*Title:* `' + title + '`\n'
-#     text += '*Ticker:* ' + ticker + '\n'
-#     text += '*Description:* ```' + description + '```\n'
-#     text += '*News Link:* ' + link + '\n'
-#     text += '*TV Link:* ' + trading_view_url
-#
-#     return text
 
 
 def initialize_browser():
@@ -174,7 +108,7 @@ def get_stories_from_search_page(url, browser):
 
         output = []
         for i, n in enumerate(urls):
-            ticker = find_ticker_in_description(heading_text[i])
+            ticker = get_ticker_from_description(heading_text[i])
             if is_english_story(urls[i]) and ticker:
                 date = normalize_date_return_object(date_text[i])
                 article_object = BusinessWireArticle(date, title_text[i], ticker,

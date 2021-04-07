@@ -2,8 +2,29 @@ from bs4 import BeautifulSoup
 import urllib.request
 import requests
 import datetime
+import re
 from iexfinance.stocks import get_historical_data
 import iexfinance
+
+# TODO - Determine how to make it find the FIRST ticker in the description, regardless of exchange
+def get_ticker_from_description(description):
+    ticker = False
+    first_split = ''
+    if 'nasdaq:' in description.lower():
+        first_split = description.lower().split('nasdaq:')[1]
+    elif 'nyse:' in description.lower():
+        first_split = description.lower().split('nyse:')[1]
+    elif 'nasdaqgs:' in description.lower():
+        first_split = description.lower().split('nasdaqgs:')[1]
+    elif bool(re.search('\$[a-z]', description.lower())):
+        first_split = description.lower().split('$')[1].split()[0].replace(' ', '')
+    else:
+        ticker = False
+
+    if first_split != '':
+        replace_spaces = first_split.replace(' ', '')
+        ticker = re.split('[^a-z]', replace_spaces)[0].upper()
+    return ticker
 
 
 def normalize_date_return_object(date_string):
