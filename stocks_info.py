@@ -6,6 +6,7 @@ import re
 from iexfinance.stocks import get_historical_data
 import iexfinance
 
+
 # TODO - Determine how to make it find the FIRST ticker in the description, regardless of exchange
 def get_ticker_from_description(description):
     ticker = False

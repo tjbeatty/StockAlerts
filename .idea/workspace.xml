@@ -2,11 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="10f3cb01-cb5c-4f18-b34f-b8e873b14699" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/sentiment_analysis_research.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FDA_check.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FDA_historical_business_wire_stories_2000.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FDA_percent_change2.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/alerts_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/alerts_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_wire.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/globe_newswire.py" beforeDir="false" afterPath="$PROJECT_DIR$/globe_newswire.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrape_old_business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrape_old_business_wire.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/daily_stocks_20perc_bw_stories_SAVED.csv" beforeDir="false" afterPath="$PROJECT_DIR$/daily_stocks_20perc_bw_stories_SAVED.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/daily_stocks_20perc_gnw_stories_SAVED.csv" beforeDir="false" afterPath="$PROJECT_DIR$/daily_stocks_20perc_gnw_stories_SAVED.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/daily_stocks_20perc_loss_bw_stories_SAVED.csv" beforeDir="false" afterPath="$PROJECT_DIR$/daily_stocks_20perc_loss_bw_stories_SAVED.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fda_approval_price_change.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fda_approvals_list.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fda_approvals_w_company.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fda_approvals_w_company_ticker.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fda_approvals_w_company_ticker_manual_check.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fda_test.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/keywords.csv" beforeDir="false" afterPath="$PROJECT_DIR$/keywords.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scrape_old_gnw.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrape_old_gnw.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stocks_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/stocks_info.py" afterDir="false" />
     </list>
@@ -36,9 +48,9 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.scrape_old_gnw">
+  <component name="RunManager" selected="Python.sentiment_analysis_research">
     <configuration name="alerts_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="FDAApprovals" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -46,9 +58,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="$USER_HOME$/.conda/envs/FDAApprovals/bin/python" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/alerts_main.py" />
@@ -144,7 +156,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="scratch" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="sentiment_analysis_research" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="FDAApprovals" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -152,11 +164,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sentiment_analysis_research.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -167,11 +179,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.sentiment_analysis_research" />
         <item itemvalue="Python.scrape_old_gnw" />
         <item itemvalue="Python.alerts_main" />
-        <item itemvalue="Python.globe_newswire" />
         <item itemvalue="Python.business_wire" />
-        <item itemvalue="Python.scratch" />
+        <item itemvalue="Python.globe_newswire" />
       </list>
     </recent_temporary>
   </component>
@@ -229,7 +241,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617686881235</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added more RSS feeds from BusinessWire and more keywords to search for. Reworked ticker search. Consolidated methods between GNW and BW.">
+      <created>1617817809966</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1617817809966</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -239,6 +258,7 @@
     <MESSAGE value="Re-worked ticker detector to account for edge case discovered in the wild." />
     <MESSAGE value="Consolidated some methods for Business Wire and Globe Newswire. Still need to delete old code." />
     <MESSAGE value="Pull old stories from GlobeNewswire working." />
-    <option name="LAST_COMMIT_MESSAGE" value="Pull old stories from GlobeNewswire working." />
+    <MESSAGE value="Added more RSS feeds from BusinessWire and more keywords to search for. Reworked ticker search. Consolidated methods between GNW and BW." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added more RSS feeds from BusinessWire and more keywords to search for. Reworked ticker search. Consolidated methods between GNW and BW." />
   </component>
 </project>

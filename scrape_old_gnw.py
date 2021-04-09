@@ -119,4 +119,4 @@ def old_gnw_news_from_search_term(search_term, pages):
     browser.quit()
 
 
-pull_gnw_stories_ticker_date('daily_stocks_20perc_xnys_xnas_2.csv', 'daily_stocks_20perc_gnw_stories_2.csv')
+pull_gnw_stories_ticker_date('daily_stocks_20perc_loss.csv', 'daily_stocks_20perc_loss_gnw_stories.csv')

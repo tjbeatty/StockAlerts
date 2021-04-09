@@ -7,7 +7,10 @@ import csv
 
 def import_keywords(file_in):
     keywords = []
-    with open(file_in, 'r') as csv_in:
+
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    filepath = my_path + "/" + file_in
+    with open(filepath, 'r') as csv_in:
         csv_reader = csv.reader(csv_in)
         header_throwaway = next(csv_reader)
         for row in csv_reader:
@@ -40,12 +43,12 @@ def add_story_to_table(ticker, date, title, description, date_time, keyword, sou
     execute_placeholder_query(connection, query, values)
 
 
-def log_rss_ping(matched_stories, alerts_sent, tickers, table_name):
+def log_rss_ping(matched_stories, alerts_sent, tickers, url, table_name):
     connection = create_db_connection()
     date_time = datetime.datetime.now()
     query = 'INSERT INTO ' + table_name + \
-            ' (date_time, matched_stories, alerts_sent, tickers) VALUES (%s, %s, %s, %s)'
-    values = (date_time, matched_stories, alerts_sent, tickers)
+            ' (date_time, matched_stories, alerts_sent, tickers, rss_url) VALUES (%s, %s, %s, %s, %s)'
+    values = (date_time, matched_stories, alerts_sent, tickers, url)
 
     execute_placeholder_query(connection, query, values)
 
@@ -136,7 +139,7 @@ def execute_alert_system(url, keywords, mysql_table):
         #     print(str(check_table_for_story(ticker, date, title, mysql_table)) + " already found in table")
 
     tickers = '^'.join(tickers)
-    log_rss_ping(match_count, alerts_sent, tickers, 'rss_pings')
+    log_rss_ping(match_count, alerts_sent, tickers, url, 'rss_pings')
 
 
 keywords = import_keywords('keywords.csv')
