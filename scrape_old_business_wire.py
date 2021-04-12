@@ -11,9 +11,16 @@ import datetime
 import stocks_info
 from time import sleep
 from stocks_info import normalize_date_return_object
+from stocks_info import get_ticker_from_description
 
 
 def pull_daily_change_for_all_bus_wire_articles(csv_input, csv_output):
+    """
+    Pull stock market data for all ticker/date combos in a file and return a file with that data
+    :param csv_input: Input csv name
+    :param csv_output: Output csv name
+    :return: Nothing
+    """
     header = ['date', 'title', 'description', 'percent_change', 'max_percent_change', 'volume']
     output = []
     with open(csv_input, 'r') as csv_in:
@@ -25,19 +32,27 @@ def pull_daily_change_for_all_bus_wire_articles(csv_input, csv_output):
 
             for row in csv_reader:
                 [date, title, description] = row
-                ticker = business_wire.get_ticker_from_description(description)
-                if ticker:
+                ticker_objects = get_ticker_from_description(description)
+                if ticker_objects:
                     date_str = stocks_info.convert_text_date_for_api(date)
-                    stock_day_data = stocks_info.get_percent_change_from_date_iex(ticker, date_str)
-                    if stock_day_data:
-                        volume = stock_day_data['volume']
-                        percent_change = stock_day_data['percent_change']
-                        max_percent_change = stock_day_data['max_percent_change']
-                        row.extend([percent_change, max_percent_change, volume])
-                        csv_writer.writerow(row)
+                    for ticker_object in ticker_objects:
+                        ticker = ticker_object.ticker
+                        stock_day_data = stocks_info.get_percent_change_from_date_iex(ticker, date_str)
+                        if stock_day_data:
+                            volume = stock_day_data['volume']
+                            percent_change = stock_day_data['percent_change']
+                            max_percent_change = stock_day_data['max_percent_change']
+                            row.extend([percent_change, max_percent_change, volume])
+                            csv_writer.writerow(row)
 
 
 def pull_bus_wire_news_stories_ticker_date(csv_input, csv_output):
+    """
+    Pull all articles from BusinessWire associated with a stock ticker on a specific date
+    :param csv_input: CSV Input name
+    :param csv_output: CSV Output name
+    :return: Nothing
+    """
     header = ['date', 'ticker', 'pct_change_prev_close', 'day_percent_change',
               'max_day_percent_change', 'title', 'description', 'url', 'same_or_prev']
     output = []
@@ -82,6 +97,12 @@ def pull_bus_wire_news_stories_ticker_date(csv_input, csv_output):
 
 
 def old_bus_wire_news_from_search_term(search_term, pages):
+    """
+    Pull all BusinessWire news related to a search term, up to a certain number of pages
+    :param search_term: Search term
+    :param pages: Number of result pages to retrieve articles from
+    :return: Outputs a CSV of all the articles
+    """
     browser = business_wire.initialize_browser()
 
     # Initialize the file output (write the header)

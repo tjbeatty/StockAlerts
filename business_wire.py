@@ -13,28 +13,22 @@ import os
 import datetime
 from stocks_info import normalize_date_return_object
 from stocks_info import get_ticker_from_description
-
-
-class BusinessWireArticle:
-    def __init__(self, date, title, ticker, description, url):
-        self.date = date
-        self.title = title
-        self.ticker = ticker
-        self.description = description
-        self.url = url
-
-    def __getitem__(self, item):
-        return item
+from stock_alert_classes import NewsArticle
 
 
 def ping_bus_wire_rss_news_feed(url):
+    """
+    Pull all articles from the RSS feed that have a stock ticker in the article
+    :param url: url of RSS Feed
+    :return: List of article objects
+    """
     feed = feedparser.parse(url)
     output = []
     for entry in feed.entries:
         description = entry.description
-        ticker = get_ticker_from_description(description)
+        ticker_object = get_ticker_from_description(description)
 
-        if ticker:
+        if ticker_object:
             date_time_utc = entry.published + 'C'
             date_time_utc_object = datetime.datetime.strptime(date_time_utc, '%a, %d %b %Y %H:%M:%S %Z') \
                 .replace(tzinfo=timezone('UTC'))
@@ -47,19 +41,26 @@ def ping_bus_wire_rss_news_feed(url):
             title = entry.title
             link = entry.link
             if is_english_story(link):
-                output.append({'ticker': ticker, 'title': title, 'description': description, 'date_time': date_time_pt,
+                output.append({'ticker': ticker_object, 'title': title, 'description': description, 'date_time': date_time_pt,
                                'link': link, 'date': date, 'date_time_sql': date_time_sql, 'source': 'Business Wire'})
 
     return output
 
 
 def filter_bus_wire_news_feed_with_nonsequential_keywords(url, keywords):
+    """
+    Filter articles using non-sequential keywords
+    # NOTE: THIS IS UNTESTED
+    :param url: url of RSS feed
+    :param keywords: list of keywords
+    :return: list of article objects
+    """
     news_stories = ping_bus_wire_rss_news_feed(url)
     output = []
     for entry in news_stories:
         description = entry['description']
-        ticker = get_ticker_from_description(description)
-        if ticker:
+        ticker_object = get_ticker_from_description(description)
+        if ticker_object:
             for keyword in keywords:
                 if keyword in description and keyword == keywords[-1]:
                     output.append(entry)
@@ -71,6 +72,10 @@ def filter_bus_wire_news_feed_with_nonsequential_keywords(url, keywords):
 
 
 def initialize_browser():
+    """
+    Initialized Chrome browser for Selenium
+    :return: Browser object
+    """
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     browser = webdriver.Chrome(options=options)
@@ -78,6 +83,11 @@ def initialize_browser():
 
 
 def is_english_story(url):
+    """
+    Checks url for language
+    :param url: URL of article
+    :return: True if it's an English artcle, False if not
+    """
     if '/en/' in url:
         return True
     else:
@@ -85,6 +95,12 @@ def is_english_story(url):
 
 
 def get_stories_from_search_page(url, browser):
+    """
+    Retrieve all articles that exist on a search page
+    :param url: URL of search
+    :param browser: Browser object
+    :return: List of article objects
+    """
     browser.get(url)
     timeout = 20
 
@@ -108,11 +124,11 @@ def get_stories_from_search_page(url, browser):
 
         output = []
         for i, n in enumerate(urls):
-            ticker = get_ticker_from_description(heading_text[i])
-            if is_english_story(urls[i]) and ticker:
+            ticker_object = get_ticker_from_description(heading_text[i])
+            if is_english_story(urls[i]) and ticker_object:
                 date = normalize_date_return_object(date_text[i])
-                article_object = BusinessWireArticle(date, title_text[i], ticker,
-                                                                   heading_text[i], urls[i])
+                article_object = NewsArticle(date, title_text[i], ticker_object, heading_text[i], urls[i],
+                                             'BusinessWire')
                 output.append(article_object)
 
         return output
@@ -121,6 +137,12 @@ def get_stories_from_search_page(url, browser):
 
 
 def find_min_date_on_search_results_page(url, browser):
+    """
+    Find the minimum date of all the articles on the page (to determine when to stop paginating)
+    :param url: Url of search
+    :param browser: Browser object
+    :return: Minimum date (if it exists), None if none exists
+    """
     browser.get(url)
     timeout = 20
     try:
@@ -141,6 +163,13 @@ def find_min_date_on_search_results_page(url, browser):
 
 
 def find_story_from_ticker_date(ticker, date_string, browser):
+    """
+    Pulls stories that match a search for a specific ticker and date combination
+    :param ticker: Company ticker
+    :param date_string: Date
+    :param browser: Browser object
+    :return: Dictionary of story object lists from the date searched, as well as the date before.
+    """
 
     # Initialize variable to keep it happy
     min_date_on_page = datetime.datetime.today()

@@ -3,32 +3,37 @@ import urllib.request
 import requests
 import datetime
 import re
-from iexfinance.stocks import get_historical_data
-import iexfinance
+from stock_alert_classes import CompanyTicker
 
 
-# TODO - Determine how to make it find the FIRST ticker in the description, regardless of exchange
+# TODO - Make ticker/exchange object and propagate throughout
 def get_ticker_from_description(description):
-    ticker = False
-    first_split = ''
-    if 'nasdaq:' in description.lower():
-        first_split = description.lower().split('nasdaq:')[1]
-    elif 'nyse:' in description.lower():
-        first_split = description.lower().split('nyse:')[1]
-    elif 'nasdaqgs:' in description.lower():
-        first_split = description.lower().split('nasdaqgs:')[1]
-    elif bool(re.search('\$[a-z]', description.lower())):
-        first_split = description.lower().split('$')[1].split()[0].replace(' ', '')
-    else:
-        ticker = False
+    """
+    Pulls tickers from text
+    :param description: Input text to look for ticker symbols
+    :return: Ticker objects (including exchanges)
+    """
+    exchanges = ['nasdaq', 'nyse', 'nasdaqgs']
+    tickers_found = []
+    for exchange in exchanges:
+        index = [i for i in range(len(description)) if description.lower().startswith(exchange, i)]
+        for j in index:
+            exchange_found = exchange.upper()
+            exchange_col = exchange + ':'
+            first_split = description[j:].lower().split(exchange_col)[1].replace(' ', '')
+            ticker = re.split('[^a-z]', first_split)[0].upper()
+            ticker_object = CompanyTicker(ticker, exchange_found)
+            tickers_found.append(ticker_object)
 
-    if first_split != '':
-        replace_spaces = first_split.replace(' ', '')
-        ticker = re.split('[^a-z]', replace_spaces)[0].upper()
-    return ticker
+    return tickers_found
 
 
 def normalize_date_return_object(date_string):
+    """
+    Pulls in a date text in many formats and returns a date object
+    :param date_string: Date text
+    :return: Date object
+    """
     months_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
                    'November', 'December']
     short_months_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -61,13 +66,25 @@ def normalize_date_return_object(date_string):
         return date_object
 
 
+# TODO - Do I need this anymore?
 def convert_text_date_for_api(date_string):
+    """
+    Take a text input and returns a specific date string for use in an API. Probably not useful anymore
+    :param date_string:
+    :return:
+    """
     date_object = datetime.datetime.strptime(date_string, '%B %d, %Y')
     date_out = date_object.strftime('%m/%d/%Y')
     return date_out
 
 
 def get_daily_response_polygon(ticker, date):
+    """
+    Gets daiy stock market data for a ticker/date
+    :param ticker: Company ticker
+    :param date: Date
+    :return: Response from API
+    """
     date_object = datetime.date.today()
 
     if '-' in date:
@@ -89,7 +106,12 @@ def get_daily_response_polygon(ticker, date):
 
 
 def get_percent_change_from_date_polygon(ticker, date):
-
+    """
+    Returns the intraday stock percent change for a ticker and date
+    :param ticker: Company ticker
+    :param date: Date
+    :return: Intraday percent change
+    """
     api_response = get_daily_response_polygon(ticker, date)
     percent_change = ''
     if api_response.status_code == 200:
@@ -103,6 +125,12 @@ def get_percent_change_from_date_polygon(ticker, date):
 
 
 def get_daily_response_iex(ticker, date, token='Prod'):
+    """
+    Gets daiy stock market data for a ticker/date
+    :param ticker: Company ticker
+    :param date: Date
+    :return: Response from API
+    """
     date_object = datetime.date.today()
     if token.lower() == 'prod':
         token = 'pk_b7f4919ac9bc46499092ab5ad36a59e4'
@@ -123,6 +151,13 @@ def get_daily_response_iex(ticker, date, token='Prod'):
 
 
 def get_percent_change_from_date_iex(ticker, date, token='Prod'):
+    """
+    Returns the intraday stock percent change for a ticker and date
+    :param ticker:
+    :param date: Date
+    :param token: Token to access API
+    :return: Dictionary of volume intraday percent change and max possible percent change
+    """
 
     api_response = get_daily_response_iex(ticker, date, token)
     if api_response.status_code == 200:
@@ -139,6 +174,11 @@ def get_percent_change_from_date_iex(ticker, date, token='Prod'):
 
 
 def retrieve_ticker_from_name(name):
+    """
+    Attempts to find the ticker based on the company name (doesn't work great)
+    :param name: Name of company
+    :return: List of ticker, company name (for reference), exchange company is traded on, Flag if conlict
+    """
     name = name.replace(' ', '%20')
     url = "https://www.marketwatch.com/tools/quotes/lookup.asp?siteID=mktw&Lookup=" + name + "&Country=us&Type=All"
     page = urllib.request.urlopen(url)
@@ -160,8 +200,17 @@ def retrieve_ticker_from_name(name):
     return [ticker, company_name, exchange, flag]
 
 
-def get_trading_view_url(ticker):
-    url = 'https://www.tradingview.com/symbols/' + ticker
+def get_trading_view_url(ticker_object):
+    # TODO - take in a ticker object instead of text, that includes the exchange
+    """
+    Ticker symbol
+    :param ticker_object: Ticker Object (ticker and exchange)
+    :return: TradingView URL
+    """
+    ticker = ticker_object.ticker
+    exchange = ticker_object.exchange
+
+    url = 'https://www.tradingview.com/symbols/' + exchange + ':' + ticker
     return url
 
 

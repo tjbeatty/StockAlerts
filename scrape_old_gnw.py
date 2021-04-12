@@ -8,7 +8,14 @@ from stocks_info import normalize_date_return_object
 from stocks_info import get_ticker_from_description
 
 
+# TODO - Get rid of this entire method. Have an identical one in scrape old bw
 def pull_daily_change_for_all_gnw_articles(csv_input, csv_output):
+    """
+    Pull daily stock change for all articles referenced in a csv
+    :param csv_input: Name of input CSV
+    :param csv_output: Name of output CSV
+    :return: Nothing
+    """
     header = ['date', 'title', 'description', 'percent_change', 'max_percent_change', 'volume']
     output = []
     with open(csv_input, 'r') as csv_in:
@@ -20,19 +27,27 @@ def pull_daily_change_for_all_gnw_articles(csv_input, csv_output):
 
             for row in csv_reader:
                 [date, title, description] = row
-                ticker = get_ticker_from_description(description)
-                if ticker:
+                ticker_objects = get_ticker_from_description(description)
+                if ticker_objects:
                     date_str = stocks_info.convert_text_date_for_api(date)
-                    stock_day_data = stocks_info.get_percent_change_from_date_iex(ticker, date_str)
-                    if stock_day_data:
-                        volume = stock_day_data['volume']
-                        percent_change = stock_day_data['percent_change']
-                        max_percent_change = stock_day_data['max_percent_change']
-                        row.extend([percent_change, max_percent_change, volume])
-                        csv_writer.writerow(row)
+                    for ticker_object in ticker_objects:
+                        ticker = ticker_object.ticker
+                        stock_day_data = stocks_info.get_percent_change_from_date_iex(ticker, date_str)
+                        if stock_day_data:
+                            volume = stock_day_data['volume']
+                            percent_change = stock_day_data['percent_change']
+                            max_percent_change = stock_day_data['max_percent_change']
+                            row.extend([percent_change, max_percent_change, volume])
+                            csv_writer.writerow(row)
 
 
 def pull_gnw_stories_ticker_date(csv_input, csv_output):
+    """
+    Pull all stories that might relate to a ticker/date event from an input CSV
+    :param csv_input: Name of input CSV
+    :param csv_output: Name of output CSV
+    :return: Nothing
+    """
     header = ['date', 'ticker', 'pct_change_prev_close', 'day_percent_change',
               'max_day_percent_change', 'title', 'description', 'url', 'same_or_prev']
     output = []
@@ -84,6 +99,12 @@ def pull_gnw_stories_ticker_date(csv_input, csv_output):
 
 
 def old_gnw_news_from_search_term(search_term, pages):
+    """
+    Finds older GlobeNewseire articles that are related to a search term
+    :param search_term: Search term to search for
+    :param pages: Numebr of pages to traverse of returned stories
+    :return: Nothing
+    """
     browser = globe_newswire.initialize_browser()
 
     # Initialize the file output (write the header)
@@ -119,4 +140,4 @@ def old_gnw_news_from_search_term(search_term, pages):
     browser.quit()
 
 
-pull_gnw_stories_ticker_date('daily_stocks_20perc_loss.csv', 'daily_stocks_20perc_loss_gnw_stories.csv')
+# pull_gnw_stories_ticker_date('daily_stocks_20perc_loss.csv', 'daily_stocks_20perc_loss_gnw_stories.csv')

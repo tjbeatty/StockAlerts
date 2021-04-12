@@ -6,6 +6,11 @@ import csv
 
 
 def pull_article_gnw(url):
+    """
+    Pull the article text from a GlobeNewsire url
+    :param url: GlobeNewswire URL
+    :return: Article text
+    """
     page = urlopen(url)
     soup = BeautifulSoup(page, 'html.parser')
 
@@ -20,6 +25,11 @@ def pull_article_gnw(url):
 
 
 def pull_article_bw(url):
+    """
+    Pull the article text from a Business Wire url
+    :param url: Business Wire URL
+    :return: Article text
+    """
     req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     page = urlopen(req).read()
     soup = BeautifulSoup(page, 'html.parser')
@@ -32,27 +42,36 @@ def pull_article_bw(url):
     return full_article
 
 
+def pull_article(url):
+    """
+    Pulls article text from a GNW or BW text
+    :param url:
+    :return: Article text, if present. False if no text present
+    """
+    if 'globenewswire' in url.lower():
+        return pull_article_gnw(url)
+    elif 'businesswire' in url.lower():
+        return pull_article_bw(url)
+    else:
+        return False
+
 # filename = 'extreme_events_same_day_gnw_bw_stories.csv'
-# with open(filename, 'r') as csv_in:
-#
-#     csv_reader = csv.reader(csv_in)
-#     header = next(csv_reader)
-#
-# for row in csv_reader:
-#     [date, ticker, pct_change_prev_close, day_percent_change, max_day_percent_change, source, title,
-#      description, url, same_or_prev] = row
-#
-#
-#
 #
 # # Read in file
 # df = pd.read_csv(filename)
 # # Launch vader sentiment analysis
 # vader = SentimentIntensityAnalyzer()
 # # Lambda function to pull sentiment from text
-# f = lambda text: vader.polarity_scores(text)['compound']
+# pos_minus_neg_sentiment = lambda text: vader.polarity_scores(text)['pos'] - vader.polarity_scores(text)['neg']
+# compound_sentiment = lambda text: vader.polarity_scores(text)['compound']
+# article_text = lambda url: pull_article(url)
 #
 # # Apply sentiment analysis to title and description fields
-# df['title_sentiment'] = df['title'].apply(f)
-# df['description_sentiment'] = df['description'].apply(f)
+# df['title_compound'] = df['title'].apply(compound_sentiment)
+# df['description_compound'] = df['description'].apply(compound_sentiment)
+# df['article_compound'] = df['url'].apply(article_text).apply(compound_sentiment)
+# df['title_pmn'] = df['title'].apply(pos_minus_neg_sentiment)
+# df['description_pmn'] = df['description'].apply(pos_minus_neg_sentiment)
+# df['article_pmn'] = df['url'].apply(article_text).apply(pos_minus_neg_sentiment)
 
+# df.to_csv('sentiment_analysis_out2.csv', index=False)
