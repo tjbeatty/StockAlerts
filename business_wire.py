@@ -39,7 +39,7 @@ def ping_bus_wire_rss_news_feed(url):
             date = date_time_pt_object.strftime('%Y-%m-%d')
 
             title = entry.title
-            link = entry.link
+            link = entry.link.split('?')[0]
             if is_english_story(link):
                 output.append({'ticker': ticker_object, 'title': title, 'description': description, 'date_time': date_time_pt,
                                'link': link, 'date': date, 'date_time_sql': date_time_sql, 'source': 'Business Wire'})

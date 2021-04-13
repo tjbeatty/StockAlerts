@@ -24,22 +24,17 @@ def import_keywords(file_in):
     return keywords
 
 
-# TODO - Add exchange to table
-def check_table_for_story(ticker, date, title, source, table_name):
+def check_table_for_story(url, table_name):
     """
     Checks a MySQL table for an article
-    :param ticker: Company ticker
-    :param date: Date of article
-    :param title: Title of article
-    :param source: News source (e.g. Business Wire, Globe Newswire)
+    :param url: URL of the article
     :param table_name: Table of articles to be searched
     :return: Result (if article found) or None (if no article found)
     """
     connection = create_db_connection()
-    query = 'SELECT ticker, date_time_story_et, source ' \
+    query = 'SELECT url ' \
             'FROM ' + table_name + \
-            ' WHERE ticker = "' + ticker + '" AND date = "' + date + '" AND title = "' + title + \
-            '" AND source = "' + source + '"'
+            ' WHERE url = "' + url + '"'
 
     # print(query)
     result = read_query(connection, query)
@@ -48,25 +43,29 @@ def check_table_for_story(ticker, date, title, source, table_name):
     return result
 
 
-def add_story_to_table(ticker, date, title, description, date_time, keyword, source, url,  table_name):
+def add_story_to_table(story_object, table_name):
     """
     Adds a story to a MySQL table
-    :param url: url of story
-    :param ticker: Company ticker
-    :param date: Date of story
-    :param title: Title of story
-    :param description: Short description from table
-    :param date_time: Date and time of story (ET)
-    :param keyword: Keyword triggered
-    :param source: News source (e.g. Business Wire, Globe Newswire)
+    :param story_object: Article object
     :param table_name: Table of articles to be searched
     :return: Nothing
     """
+    title = story_object['title']
+    date = story_object['date']
+    date_time = story_object['date_time_sql']
+    ticker_object_list = story_object['ticker']
+    description = story_object['description']
+    keyword_matched = story_object['keyword_matched']
+    source = story_object['source']
+    link = story_object['link'].split('?')[0]
+    exchange_ticker_list = [ticker.exchange + ': ' + ticker.ticker for ticker in ticker_object_list]
+    tickers_in_story = '^'.join(exchange_ticker_list)
+
     connection = create_db_connection()
     query = 'INSERT INTO ' + table_name + \
-            ' (ticker, date, title, description, date_time_story_et, keyword_hit, source) ' \
-            'VALUES (%s, %s, %s, %s, %s, %s, %s)'
-    values = (ticker, date, title, description, date_time, keyword, source)
+            ' (ticker, date, title, description, date_time_story_et, keyword_hit, source, url) ' \
+            'VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
+    values = (tickers_in_story, date, title, description, date_time, keyword_matched, source, link)
 
     execute_placeholder_query(connection, query, values)
 
@@ -101,19 +100,21 @@ def format_alert_for_slack(entry):
     description = entry['description']
     date_time = entry['date_time']
     link = entry['link']
-    ticker_object = entry['ticker']
+    ticker_object_list = entry['ticker']
     source = entry['source']
-    trading_view_url = get_trading_view_url(ticker_object)
+    exchange_ticker_list = [ticker.exchange + ': ' + ticker.ticker for ticker in ticker_object_list]
+    trading_view_urls = [get_trading_view_url(ticker) for ticker in ticker_object_list]
 
     text = '<!here> \n'
     text += '*Date/Time:* `' + date_time + '`\n'
     text += '*Source:* ' + source + '\n'
-    text += '*Ticker:* ' + ticker_object.ticker + '\n'
-    text += '*Exchange:* ' + ticker_object.exchange + '\n'
+    text += '*Ticker:* ' + ', '.join(exchange_ticker_list) + '\n'
+    for url in trading_view_urls:
+        text += '*TV Link:* ' + url + '\n'
     text += '*Title:* `' + title + '`\n'
     text += '*Description:* ```' + description + '```\n'
-    text += '*News Link:* ' + link + '\n'
-    text += '*TV Link:* ' + trading_view_url
+    text += '*News Link:* ' + link
+
 
     return text
 
@@ -164,45 +165,47 @@ def filter_rss_news_feed_with_keyword(url, keywords):
 # TODO - Add method to write to another table for "urls checked", to be used in conjunction with searching the article
 #  for the tickers instead of just the short description
 
-# TODO - check actual article for ticker(s).
+# TODO - check actual article for ticker(s) and keywords/sentiment.
 #  - Log each article/url in a MySQL table has having been checked (so we don't waste time going into article again).
 #  -
-def execute_alert_system(url, keywords, mysql_table):
+def execute_alert_system(rss_url, keywords, mysql_table):
     """
     Main method. Executes the alert system
-    :param url: url of RSS feed
+    :param rss_url: url of RSS feed
     :param keywords: Keywords to search articles for
     :param mysql_table: MySQL table to write found article results to
     :return: Nothing
     """
-    matched_stories = filter_rss_news_feed_with_keyword(url, keywords)
+    matched_stories = filter_rss_news_feed_with_keyword(rss_url, keywords)
     match_count = len(matched_stories)
     alerts_sent = 0
-    tickers = []
+    tickers_logged_rss_ping = []
 
     for story in matched_stories:
         title = story['title']
         date = story['date']
         date_time = story['date_time_sql']
-        ticker = story['ticker']
+        ticker_object_list = story['ticker']
         description = story['description']
         keyword_matched = story['keyword_matched']
         source = story['source']
-        link = story['link']
+        link = story['link'].split('?')[0]
+        exchange_ticker_list = [ticker.exchange + ': ' + ticker.ticker for ticker in ticker_object_list]
+        tickers_in_story = '^'.join(exchange_ticker_list)
 
-        if not check_table_for_story(ticker, date, title, source, mysql_table):
+        if not check_table_for_story(link, mysql_table):
             formatted_alert = format_alert_for_slack(story)
             send_alert_to_slack(formatted_alert)
             # print(ticker, date, title, description, date_time, keywords)
-            add_story_to_table(ticker, date, title, description, date_time, keyword_matched, source, link, mysql_table)
-            print("Sent " + ticker + " story from " + date_time + " to Slack")
+            add_story_to_table(story, mysql_table)
+            print("Sent " + tickers_in_story + " story from " + date_time + " to Slack")  # TODO - Not a list
             alerts_sent += 1
-            tickers.append(ticker)
+            tickers_logged_rss_ping.append(tickers_in_story)
         # else:
         #     print(str(check_table_for_story(ticker, date, title, mysql_table)) + " already found in table")
 
-    tickers = '^'.join(tickers)
-    log_rss_ping(match_count, alerts_sent, tickers, url, 'rss_pings')
+    tickers_logged_rss_ping = '^'.join(tickers_logged_rss_ping)
+    log_rss_ping(match_count, alerts_sent, tickers_logged_rss_ping, rss_url, 'rss_pings')
 
 
 keywords = import_keywords('keywords.csv')
@@ -234,3 +237,5 @@ rss_feeds = [gnw_public_company_rss, bw_tech_rss, bw_energy_rss, bw_defense_rss,
 
 for feed in rss_feeds:
     execute_alert_system(feed, keywords, 'story_alerts')
+
+# print(ping_bus_wire_rss_news_feed(bw_health_rss))

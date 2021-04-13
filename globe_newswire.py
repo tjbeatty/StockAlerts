@@ -41,7 +41,7 @@ def ping_gnw_rss_news_feed(url):
             description_html = entry.description
             description = re.sub('<[^<]+?>', '', description_html)
             title = entry.title
-            link = entry.link
+            link = entry.link.split('?')[0]
 
             output.append({'ticker': ticker_object, 'title': title, 'description': description, 'date_time': date_time_pt,
                            'link': link, 'date': date, 'date_time_sql': date_time_sql, 'source': 'Globe Newswire'})

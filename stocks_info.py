@@ -16,10 +16,10 @@ def get_ticker_from_description(description):
     exchanges = ['nasdaq', 'nyse', 'nasdaqgs']
     tickers_found = []
     for exchange in exchanges:
-        index = [i for i in range(len(description)) if description.lower().startswith(exchange, i)]
+        exchange_col = exchange + ':'
+        index = [i for i in range(len(description)) if description.lower().startswith(exchange_col, i)]
         for j in index:
             exchange_found = exchange.upper()
-            exchange_col = exchange + ':'
             first_split = description[j:].lower().split(exchange_col)[1].replace(' ', '')
             ticker = re.split('[^a-z]', first_split)[0].upper()
             ticker_object = CompanyTicker(ticker, exchange_found)
@@ -215,3 +215,5 @@ def get_trading_view_url(ticker_object):
 
 
 # print(get_percent_change_from_date_iex('TSLA', '02/02/2021'))
+
+# print(get_ticker_from_description('There is NYSE not a ticker in this description'))
