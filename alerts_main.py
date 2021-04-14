@@ -182,13 +182,8 @@ def execute_alert_system(rss_url, keywords, mysql_table):
     tickers_logged_rss_ping = []
 
     for story in matched_stories:
-        title = story['title']
-        date = story['date']
         date_time = story['date_time_sql']
         ticker_object_list = story['ticker']
-        description = story['description']
-        keyword_matched = story['keyword_matched']
-        source = story['source']
         link = story['link'].split('?')[0]
         exchange_ticker_list = [ticker.exchange + ': ' + ticker.ticker for ticker in ticker_object_list]
         tickers_in_story = '^'.join(exchange_ticker_list)
@@ -196,13 +191,10 @@ def execute_alert_system(rss_url, keywords, mysql_table):
         if not check_table_for_story(link, mysql_table):
             formatted_alert = format_alert_for_slack(story)
             send_alert_to_slack(formatted_alert)
-            # print(ticker, date, title, description, date_time, keywords)
             add_story_to_table(story, mysql_table)
-            print("Sent " + tickers_in_story + " story from " + date_time + " to Slack")  # TODO - Not a list
+            print("Sent " + tickers_in_story + " story from " + date_time + " to Slack")
             alerts_sent += 1
             tickers_logged_rss_ping.append(tickers_in_story)
-        # else:
-        #     print(str(check_table_for_story(ticker, date, title, mysql_table)) + " already found in table")
 
     tickers_logged_rss_ping = '^'.join(tickers_logged_rss_ping)
     log_rss_ping(match_count, alerts_sent, tickers_logged_rss_ping, rss_url, 'rss_pings')

@@ -3,6 +3,12 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 import csv
+from textblob import TextBlob
+import stanza
+import re
+import os
+
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 
 def pull_article_gnw(url):
@@ -14,14 +20,20 @@ def pull_article_gnw(url):
     page = urlopen(url)
     soup = BeautifulSoup(page, 'html.parser')
 
-    main_body = soup.find_all('div', id='main-body-container')
+    all_page_text = soup.find('div', id='main-body-container')
+    p_elems_all = all_page_text.findAll('p')
+    split_index = len(p_elems_all)
 
-    # Full article, including "About" and "Forward-looking" statements
-    full_article = main_body[0].text.strip()
-    # There's a chance it will remove some of this
-    only_article = full_article.split('\nAbout ')[0]
+    for i, p in enumerate(p_elems_all):
+        # Find <p> element that starts with "About" to split
+        if re.match('^[ |\n]*about', p.text.lower()):
+            split_index = i
+            break
 
-    return only_article
+    p_elems_article = p_elems_all[:split_index]
+    article_text = ' '.join([p.text for p in p_elems_article])
+
+    return article_text
 
 
 def pull_article_bw(url):
@@ -33,13 +45,22 @@ def pull_article_bw(url):
     req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     page = urlopen(req).read()
     soup = BeautifulSoup(page, 'html.parser')
-    main_body = soup.find('div', itemprop='articleBody').find_all('p')
-    full_article = ''
-    for p in main_body:
-        p = p.text.strip()
-        full_article = full_article + ' ' + p
+    all_page_text = soup.find('div', itemprop='articleBody')
 
-    return full_article
+    p_elems_all = all_page_text.findAll('p')
+    split_index = len(p_elems_all)
+
+    for i, p in enumerate(p_elems_all):
+        # Find <p> element that starts with "About" to split
+        if re.match('^[ |\n]*about', p.text.lower()):
+            split_index = i
+            break
+
+    p_elems_article = p_elems_all[:split_index]
+    article_text = ' '.join([p.text for p in p_elems_article])
+    # print(article_text)
+
+    return article_text
 
 
 def pull_article(url):
@@ -55,8 +76,61 @@ def pull_article(url):
     else:
         return False
 
-# filename = 'extreme_events_same_day_gnw_bw_stories.csv'
-#
+
+def vader_pos_minus_neg_sentiment(text, vader=SentimentIntensityAnalyzer()):
+    return vader.polarity_scores(text)['pos'] - vader.polarity_scores(text)['neg']
+
+
+def vader_compound_sentiment(text, vader=SentimentIntensityAnalyzer()):
+    return vader.polarity_scores(text)['compound']
+
+
+def stanza_sentiment(text):
+    nlp = stanza.Pipeline(lang='en', processors='tokenize,sentiment')
+    doc = nlp(text)
+    sentences = 0
+    sentiment = 0
+    for i, sentence in enumerate(doc.sentences):
+        sentences += 1
+        sentiment += sentence.sentiment - 1
+
+    return sentiment / sentences
+
+
+def get_sentiments(title, description, url):
+    # TODO - Add Stanza sentiment analysis
+    article_text = pull_article(url)
+
+    nltk_pos_minus_neg_title = vader_pos_minus_neg_sentiment(title)
+    nltk_pos_minus_neg_description = vader_pos_minus_neg_sentiment(description)
+    nltk_pos_minus_neg_article = vader_pos_minus_neg_sentiment(article_text)
+    nltk_compound_title = vader_compound_sentiment(title)
+    nltk_compound_description = vader_compound_sentiment(description)
+    nltk_compound_article = vader_compound_sentiment(article_text)
+    tb_polarity_title = TextBlob(title).polarity
+    tb_polarity_description = TextBlob(description).polarity
+    tb_polarity_article = TextBlob(article_text).polarity
+    stanza_sentiment_article = stanza_sentiment(article_text)
+
+    return {"nltk_pos_minus_neg_title": nltk_pos_minus_neg_title,
+            "nltk_pos_minus_neg_description": nltk_pos_minus_neg_description,
+            "nltk_pos_minus_neg_article": nltk_pos_minus_neg_article, "nltk_compound_title": nltk_compound_title,
+            "nltk_compound_description": nltk_compound_description, "nltk_compound_article": nltk_compound_article,
+            "tb_polarity_title": tb_polarity_title, "tb_polarity_description": tb_polarity_description,
+            "tb_polarity_article": tb_polarity_article,
+            "stanza_sentiment_article": stanza_sentiment_article}
+
+
+filename = 'extreme_events_same_day_gnw_bw_stories.csv'
+url_gnw = 'http://www.globenewswire.com/news-release/2021/04/13/2209526/33039/en/ProQR-Announces-Publication-in-Nature-Medicine-for-Sepofarsen-in-Leber-Congenital-Amaurosis-10.html'
+url_bw = 'https://www.businesswire.com/news/home/20210413006168/en/U.S.-FDA-Grants-Accelerated-Approval-to-Trodelvy%C2%AE-for-the-Treatment-of-Metastatic-Urothelial-Cancer/'
+print(get_sentiments(
+    "U.S. FDA Grants Accelerated Approval to Trodelvy® for the Treatment of Metastatic Urothelial Cancer",
+    "OSTER CITY, Calif.--(BUSINESS WIRE)--Gilead Sciences, Inc. (Nasdaq: GILD) today announced that the U.S. Food and Drug Administration (FDA) has granted accelerated approval of Trodelvy® (sacituzumab govitecan-hziy) for use in adult patients with locally advanced or metastatic urothelial cancer (UC) who have previously received a platinum-containing chemotherapy and either a programmed death receptor-1 (PD-1) or a programmed death-ligand 1 (PD-L1) inhibitor. The accelerated approval was based on",
+    url_bw))
+
+# pull_article(url_bw)
+
 # # Read in file
 # df = pd.read_csv(filename)
 # # Launch vader sentiment analysis

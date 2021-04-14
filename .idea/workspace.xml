@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="10f3cb01-cb5c-4f18-b34f-b8e873b14699" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alerts_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/alerts_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_wire.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/globe_newswire.py" beforeDir="false" afterPath="$PROJECT_DIR$/globe_newswire.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keywords.csv" beforeDir="false" afterPath="$PROJECT_DIR$/keywords.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentiment_analysis_research.py" beforeDir="false" afterPath="$PROJECT_DIR$/sentiment_analysis_research.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stocks_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/stocks_info.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,9 +35,9 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
-  <component name="RunManager" selected="Python.alerts_main">
+  <component name="RunManager" selected="Python.sentiment_analysis_research">
     <configuration name="alerts_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="FDAApprovals" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -165,9 +166,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.sentiment_analysis_research" />
         <item itemvalue="Python.alerts_main" />
         <item itemvalue="Python.stocks_info" />
-        <item itemvalue="Python.sentiment_analysis_research" />
         <item itemvalue="Python.scrape_old_gnw" />
         <item itemvalue="Python.business_wire" />
       </list>
@@ -248,7 +249,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618206188704</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Refactored to include exchange in ticker object, ability to match multiple tickers in a headline, and alert and log for multiple tickers per story. Also, refactored to make url the unique to check against for stories.">
+      <created>1618287861535</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1618287861536</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -261,6 +269,7 @@
     <MESSAGE value="Added more RSS feeds from BusinessWire and more keywords to search for. Reworked ticker search. Consolidated methods between GNW and BW." />
     <MESSAGE value="Instituted methods to pull article text from GlobeNewswire and Business Newswire urls" />
     <MESSAGE value="Partially refactored to include a tiker object, which includes exchange. Needs more work." />
-    <option name="LAST_COMMIT_MESSAGE" value="Partially refactored to include a tiker object, which includes exchange. Needs more work." />
+    <MESSAGE value="Refactored to include exchange in ticker object, ability to match multiple tickers in a headline, and alert and log for multiple tickers per story. Also, refactored to make url the unique to check against for stories." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored to include exchange in ticker object, ability to match multiple tickers in a headline, and alert and log for multiple tickers per story. Also, refactored to make url the unique to check against for stories." />
   </component>
 </project>

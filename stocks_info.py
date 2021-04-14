@@ -6,7 +6,6 @@ import re
 from stock_alert_classes import CompanyTicker
 
 
-# TODO - Make ticker/exchange object and propagate throughout
 def get_ticker_from_description(description):
     """
     Pulls tickers from text
@@ -201,7 +200,6 @@ def retrieve_ticker_from_name(name):
 
 
 def get_trading_view_url(ticker_object):
-    # TODO - take in a ticker object instead of text, that includes the exchange
     """
     Ticker symbol
     :param ticker_object: Ticker Object (ticker and exchange)
