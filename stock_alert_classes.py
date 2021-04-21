@@ -1,8 +1,6 @@
-# TODO - Change to ticker object list wherever an Article object exists
-
 class NewsArticle:
-    def __init__(self, date, title, ticker_object_list, description, url, source):
-        self.date = date
+    def __init__(self, date_time, title, ticker_object_list, description, url, source):
+        self.date_time = date_time
         self.title = title
         self.ticker_object_list = ticker_object_list
         self.description = description

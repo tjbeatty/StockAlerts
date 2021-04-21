@@ -5,13 +5,62 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import datetime
-from stocks_info import normalize_date_return_object
+from stocks_info import normalize_date_return_object, get_ticker_objects_from_description, \
+    get_exchange_tickers_description
 from time import sleep
-from stocks_info import get_ticker_from_description
 from stock_alert_classes import NewsArticle
+from bs4 import BeautifulSoup
+from urllib.request import Request, urlopen
+
+
+def pull_article_date_time_gnw(url):
+    """
+    Returns the datetime object a Globe Newswire article was published
+    :param url: GNW article url
+    :return: datetime object (ET)
+    """
+    page = urlopen(url)
+    soup = BeautifulSoup(page, 'html.parser')
+
+    date_time_str = soup.find('time')['datetime']
+    date_time_utc_object = datetime.datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%SZ'). \
+        replace(tzinfo=timezone('UTC'))
+    date_time_eastern_object = date_time_utc_object.astimezone(timezone('US/Eastern'))
+
+    return date_time_eastern_object
+
+
+def pull_article_gnw(url):
+    """
+    Pull the article text from a GlobeNewsire url
+    :param url: GlobeNewswire URL
+    :return: Article text
+    """
+    page = urlopen(url)
+    soup = BeautifulSoup(page, 'html.parser')
+
+    all_page_text = soup.find('div', id='main-body-container')
+    title = soup.find('h2').text
+    date_time_str = soup.find('time')['datetime']
+    date_time_utc_object = datetime.datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%SZ').\
+        replace(tzinfo=timezone('UTC'))
+    date_time_eastern_object = date_time_utc_object.astimezone(timezone('US/Eastern'))
+    p_elems_all = all_page_text.findAll('p')
+    split_index = len(p_elems_all)
+
+    for i, p in enumerate(p_elems_all):
+        # Find <p> element that starts with "About" to split
+        if re.match('^[ |\n]*about', p.text.lower()):
+            split_index = i
+            break
+
+    p_elems_article = p_elems_all[:split_index]
+    article_text = ' '.join([p.text for p in p_elems_article])
+    tickers = get_exchange_tickers_description(article_text)
+
+    return {'title': title, 'date_time': date_time_eastern_object, 'tickers': tickers, 'article_text': article_text}
 
 
 def ping_gnw_rss_news_feed(url):
@@ -23,28 +72,25 @@ def ping_gnw_rss_news_feed(url):
     feed = feedparser.parse(url)
     output = []
     for entry in feed.entries:
-        ticker_object = False
+        ticker_object_list = False
         for i, tag in enumerate(entry.tags):
-            if get_ticker_from_description(entry.tags[i].term):
-                ticker_object = get_ticker_from_description(entry.tags[i].term)
+            if get_ticker_objects_from_description(entry.tags[i].term):
+                ticker_object_list = get_ticker_objects_from_description(entry.tags[i].term)
 
-        if ticker_object and entry.language == 'en':
+        if ticker_object_list and entry.language == 'en':
             date_time_utc = entry.published
             date_time_utc_object = datetime.datetime.strptime(date_time_utc, '%a, %d %b %Y %H:%M %Z') \
                 .replace(tzinfo=timezone('UTC'))
             date_time_eastern_object = date_time_utc_object.astimezone(timezone('US/Eastern'))
-            date_time_sql = date_time_eastern_object.strftime('%Y-%m-%d %H:%M:%S')
-            date_time_pt_object = date_time_utc_object.astimezone(timezone('US/Pacific'))
-            date_time_pt = date_time_pt_object.strftime('%m/%d/%y %-I:%M %p %Z')
-            date = date_time_pt_object.strftime('%Y-%m-%d')
 
             description_html = entry.description
             description = re.sub('<[^<]+?>', '', description_html)
             title = entry.title
             link = entry.link.split('?')[0]
+            news_article = NewsArticle(date_time_eastern_object, title, ticker_object_list,
+                                       description, link, 'Globe Newswire')
 
-            output.append({'ticker': ticker_object, 'title': title, 'description': description, 'date_time': date_time_pt,
-                           'link': link, 'date': date, 'date_time_sql': date_time_sql, 'source': 'Globe Newswire'})
+            output.append(news_article)
 
     return output
 
@@ -61,7 +107,7 @@ def filter_gnw_news_feed_with_nonsequential_keywords(url, keywords):
     output = []
     for entry in news_stories:
         description = entry['description']
-        ticker_object = get_ticker_from_description(description)
+        ticker_object = get_ticker_objects_from_description(description)
         if ticker_object:
             for keyword in keywords:
                 if keyword in description and keyword == keywords[-1]:
@@ -149,7 +195,7 @@ def get_stories_from_search_page(url, browser):
 
         output = []
         for i, n in enumerate(urls):
-            ticker_object = get_ticker_from_description(heading_text[i])
+            ticker_object = get_ticker_objects_from_description(heading_text[i])
             if ticker_object:
                 date = normalize_date_return_object(date_text[i])
                 article_object = NewsArticle(date, title_text[i], ticker_object, heading_text[i], urls[i], 'Globe Newswire')
@@ -198,7 +244,7 @@ def find_story_from_ticker_date(ticker, date_begin_string, browser, exchange='',
 
         for story in search_page_details:
             # TODO - add the ability to also ensure the exchange is the same
-            tickers_in_story = get_ticker_from_description(story.description)
+            tickers_in_story = get_ticker_objects_from_description(story.description)
             tickers_only = [i.ticker for i in tickers_in_story]
             if ticker in tickers_only:
                 all_stories.append(story)
@@ -226,11 +272,11 @@ def find_story_from_ticker_two_days(ticker, date_string, browser, exchange=''):
     stories = find_story_from_ticker_date(ticker, day_before_str, browser, exchange, date_str)
     sleep(1)
     for story in stories:
-        if story.date.date() == date_start_object.date():
+        if story.date_time.date_time() == date_start_object.date_time():
             print('Same day = ' + story.title)
             same_day_stories.append(story)
 
-        if story.date.date() == day_before_obj.date():
+        if story.date_time.date_time() == day_before_obj.date():
             print('Prev day = ' + story.title)
             prev_day_stories.append(story)
 

@@ -7,60 +7,10 @@ from textblob import TextBlob
 import stanza
 import re
 import os
+from globe_newswire import pull_article_gnw
+from business_wire import pull_article_bw
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
-
-
-def pull_article_gnw(url):
-    """
-    Pull the article text from a GlobeNewsire url
-    :param url: GlobeNewswire URL
-    :return: Article text
-    """
-    page = urlopen(url)
-    soup = BeautifulSoup(page, 'html.parser')
-
-    all_page_text = soup.find('div', id='main-body-container')
-    p_elems_all = all_page_text.findAll('p')
-    split_index = len(p_elems_all)
-
-    for i, p in enumerate(p_elems_all):
-        # Find <p> element that starts with "About" to split
-        if re.match('^[ |\n]*about', p.text.lower()):
-            split_index = i
-            break
-
-    p_elems_article = p_elems_all[:split_index]
-    article_text = ' '.join([p.text for p in p_elems_article])
-
-    return article_text
-
-
-def pull_article_bw(url):
-    """
-    Pull the article text from a Business Wire url
-    :param url: Business Wire URL
-    :return: Article text
-    """
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    page = urlopen(req).read()
-    soup = BeautifulSoup(page, 'html.parser')
-    all_page_text = soup.find('div', itemprop='articleBody')
-
-    p_elems_all = all_page_text.findAll('p')
-    split_index = len(p_elems_all)
-
-    for i, p in enumerate(p_elems_all):
-        # Find <p> element that starts with "About" to split
-        if re.match('^[ |\n]*about', p.text.lower()):
-            split_index = i
-            break
-
-    p_elems_article = p_elems_all[:split_index]
-    article_text = ' '.join([p.text for p in p_elems_article])
-    # print(article_text)
-
-    return article_text
 
 
 def pull_article(url):
@@ -121,13 +71,13 @@ def get_sentiments(title, description, url):
             "stanza_sentiment_article": stanza_sentiment_article}
 
 
-filename = 'extreme_events_same_day_gnw_bw_stories.csv'
-url_gnw = 'http://www.globenewswire.com/news-release/2021/04/13/2209526/33039/en/ProQR-Announces-Publication-in-Nature-Medicine-for-Sepofarsen-in-Leber-Congenital-Amaurosis-10.html'
-url_bw = 'https://www.businesswire.com/news/home/20210413006168/en/U.S.-FDA-Grants-Accelerated-Approval-to-Trodelvy%C2%AE-for-the-Treatment-of-Metastatic-Urothelial-Cancer/'
-print(get_sentiments(
-    "U.S. FDA Grants Accelerated Approval to Trodelvy® for the Treatment of Metastatic Urothelial Cancer",
-    "OSTER CITY, Calif.--(BUSINESS WIRE)--Gilead Sciences, Inc. (Nasdaq: GILD) today announced that the U.S. Food and Drug Administration (FDA) has granted accelerated approval of Trodelvy® (sacituzumab govitecan-hziy) for use in adult patients with locally advanced or metastatic urothelial cancer (UC) who have previously received a platinum-containing chemotherapy and either a programmed death receptor-1 (PD-1) or a programmed death-ligand 1 (PD-L1) inhibitor. The accelerated approval was based on",
-    url_bw))
+# filename = 'extreme_events_same_day_gnw_bw_stories.csv'
+# url_gnw = 'http://www.globenewswire.com/news-release/2021/04/13/2209526/33039/en/ProQR-Announces-Publication-in-Nature-Medicine-for-Sepofarsen-in-Leber-Congenital-Amaurosis-10.html'
+# url_bw = 'https://www.businesswire.com/news/home/20210413006168/en/U.S.-FDA-Grants-Accelerated-Approval-to-Trodelvy%C2%AE-for-the-Treatment-of-Metastatic-Urothelial-Cancer/'
+# print(get_sentiments(
+#     "U.S. FDA Grants Accelerated Approval to Trodelvy® for the Treatment of Metastatic Urothelial Cancer",
+#     "OSTER CITY, Calif.--(BUSINESS WIRE)--Gilead Sciences, Inc. (Nasdaq: GILD) today announced that the U.S. Food and Drug Administration (FDA) has granted accelerated approval of Trodelvy® (sacituzumab govitecan-hziy) for use in adult patients with locally advanced or metastatic urothelial cancer (UC) who have previously received a platinum-containing chemotherapy and either a programmed death receptor-1 (PD-1) or a programmed death-ligand 1 (PD-L1) inhibitor. The accelerated approval was based on",
+#     url_bw))
 
 # pull_article(url_bw)
 

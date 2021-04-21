@@ -43,21 +43,21 @@ def check_table_for_story(url, table_name):
     return result
 
 
-def add_story_to_table(story_object, table_name):
+def add_story_to_table(story_object, keyword_matched, table_name):
     """
     Adds a story to a MySQL table
     :param story_object: Article object
     :param table_name: Table of articles to be searched
     :return: Nothing
     """
-    title = story_object['title']
-    date = story_object['date']
-    date_time = story_object['date_time_sql']
-    ticker_object_list = story_object['ticker']
-    description = story_object['description']
-    keyword_matched = story_object['keyword_matched']
-    source = story_object['source']
-    link = story_object['link'].split('?')[0]
+    title = story_object.title
+    date_time_et_obj = story_object.date_time
+    date = date_time_et_obj.strftime('%Y-%m-%d')
+    date_time = date_time_et_obj.strftime('%Y-%m-%d %H:%M:%S')
+    ticker_object_list = story_object.ticker_object_list
+    description = story_object.description
+    source = story_object.source
+    link = story_object.url
     exchange_ticker_list = [ticker.exchange + ': ' + ticker.ticker for ticker in ticker_object_list]
     tickers_in_story = '^'.join(exchange_ticker_list)
 
@@ -96,12 +96,13 @@ def format_alert_for_slack(entry):
     :return: Formatted text for Slack alert
     """
 
-    title = entry['title']
-    description = entry['description']
-    date_time = entry['date_time']
-    link = entry['link']
-    ticker_object_list = entry['ticker']
-    source = entry['source']
+    title = entry.title
+    description = entry.description
+    date_time_et = entry.date_time
+    date_time = date_time_et.strftime('%m/%d/%y %-I:%M %p %Z')
+    link = entry.url
+    ticker_object_list = entry.ticker_object_list
+    source = entry.source
     exchange_ticker_list = [ticker.exchange + ': ' + ticker.ticker for ticker in ticker_object_list]
     trading_view_urls = [get_trading_view_url(ticker) for ticker in ticker_object_list]
 
@@ -114,7 +115,6 @@ def format_alert_for_slack(entry):
     text += '*Title:* `' + title + '`\n'
     text += '*Description:* ```' + description + '```\n'
     text += '*News Link:* ' + link
-
 
     return text
 
@@ -146,18 +146,16 @@ def filter_rss_news_feed_with_keyword(url, keywords):
 
     output = []
     for entry in news_stories:
-        description = entry['description']
-        ticker_object = get_ticker_from_description(description)
+        description = entry.description
+        ticker_object = entry.ticker_object_list
         if ticker_object:
             if type(keywords) == list:
                 for keyword in keywords:
                     if keyword.lower() in description.lower():
-                        entry['keyword_matched'] = keyword
-                        output.append(entry)
+                        output.append({'article': entry, 'keyword': keyword})
             elif type(keywords) == str:
                 if keywords.lower() in description.lower():
-                    entry['keyword_matched'] = keywords
-                    output.append(entry)
+                    output.append({'article': entry, 'keyword': keywords})
 
     return output
 
@@ -181,17 +179,19 @@ def execute_alert_system(rss_url, keywords, mysql_table):
     alerts_sent = 0
     tickers_logged_rss_ping = []
 
-    for story in matched_stories:
-        date_time = story['date_time_sql']
-        ticker_object_list = story['ticker']
-        link = story['link'].split('?')[0]
+    for story_keyword in matched_stories:
+        story = story_keyword['article']
+        keyword_matched = story_keyword['keyword']
+        date_time = story.date_time.strftime('%Y-%m-%d %H:%M:%S')
+        ticker_object_list = story.ticker_object_list
+        link = story.url
         exchange_ticker_list = [ticker.exchange + ': ' + ticker.ticker for ticker in ticker_object_list]
         tickers_in_story = '^'.join(exchange_ticker_list)
 
         if not check_table_for_story(link, mysql_table):
             formatted_alert = format_alert_for_slack(story)
             send_alert_to_slack(formatted_alert)
-            add_story_to_table(story, mysql_table)
+            add_story_to_table(story, keyword_matched, mysql_table)
             print("Sent " + tickers_in_story + " story from " + date_time + " to Slack")
             alerts_sent += 1
             tickers_logged_rss_ping.append(tickers_in_story)

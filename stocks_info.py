@@ -6,7 +6,7 @@ import re
 from stock_alert_classes import CompanyTicker
 
 
-def get_ticker_from_description(description):
+def get_ticker_objects_from_description(description):
     """
     Pulls tickers from text
     :param description: Input text to look for ticker symbols
@@ -27,6 +27,12 @@ def get_ticker_from_description(description):
     return tickers_found
 
 
+def get_exchange_tickers_description(description):
+    ticker_object_list = get_ticker_objects_from_description(description)
+    exchange_ticker_list = [ticker.exchange + ': ' + ticker.ticker for ticker in ticker_object_list]
+    return exchange_ticker_list
+
+
 def normalize_date_return_object(date_string):
     """
     Pulls in a date text in many formats and returns a date object
@@ -42,8 +48,16 @@ def normalize_date_return_object(date_string):
     timezone_text_in_date = [ele for ele in timezones if (ele in date_string)]
     if month_text_in_date and "," in date_string:
         if ':' in date_string:
-            date_string = date_string[0:date_string.index(':') + 3]
-            date_object = datetime.datetime.strptime(date_string, '%B %d, %Y %H:%M')
+            if ' pm' in date_string.lower() or ' am' in date_string.lower():
+                date_string = date_string[0:date_string.index(':') + 6]
+                date_object = datetime.datetime.strptime(date_string, '%B %d, %Y %H:%M %p')
+                print(date_object)
+            elif 'pm' in date_string.lower() or 'am' in date_string.lower():
+                date_string = date_string[0:date_string.index(':') + 5]
+                date_object = datetime.datetime.strptime(date_string, '%B %d, %Y %H:%M%p')
+            else:
+                date_string = date_string[0:date_string.index(':') + 3]
+                date_object = datetime.datetime.strptime(date_string, '%B %d, %Y %H:%M')
         else:
             date_object = datetime.datetime.strptime(date_string, '%B %d, %Y')
 
@@ -214,4 +228,7 @@ def get_trading_view_url(ticker_object):
 
 # print(get_percent_change_from_date_iex('TSLA', '02/02/2021'))
 
-# print(get_ticker_from_description('There is NYSE not a ticker in this description'))
+# tickers = get_ticker_from_description('SAN DIEGO, CA, April  14, 2021  (GLOBE NEWSWIRE) -- GreenBox (POS NASDAQ: GBOX) ("GreenBox" or "the Company"), an emerging financial technology company leveraging proprietary blockchain security to build customized payment solutions, today announced the company has selected Signature Bank (Nasdaq: SBNY), a New York-based, full-service commercial bank, as the banking solution to meet its smart-contract token infrastructure needs.')
+#
+# for ticker in tickers:
+#     print(ticker.ticker)

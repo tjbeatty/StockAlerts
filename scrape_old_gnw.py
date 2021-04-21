@@ -1,11 +1,7 @@
 import csv
 import os
-import globe_newswire
-from globe_newswire import find_story_from_ticker_two_days
-import stocks_info
-from time import sleep
-from stocks_info import normalize_date_return_object
-from stocks_info import get_ticker_from_description
+from globe_newswire import find_story_from_ticker_two_days, get_stories_from_search_page, initialize_browser
+from stocks_info import get_ticker_objects_from_description, convert_text_date_for_api, get_percent_change_from_date_iex
 
 
 # TODO - Get rid of this entire method. Have an identical one in scrape old bw
@@ -27,12 +23,12 @@ def pull_daily_change_for_all_gnw_articles(csv_input, csv_output):
 
             for row in csv_reader:
                 [date, title, description] = row
-                ticker_objects = get_ticker_from_description(description)
+                ticker_objects = get_ticker_objects_from_description(description)
                 if ticker_objects:
-                    date_str = stocks_info.convert_text_date_for_api(date)
+                    date_str = convert_text_date_for_api(date)
                     for ticker_object in ticker_objects:
                         ticker = ticker_object.ticker
-                        stock_day_data = stocks_info.get_percent_change_from_date_iex(ticker, date_str)
+                        stock_day_data = get_percent_change_from_date_iex(ticker, date_str)
                         if stock_day_data:
                             volume = stock_day_data['volume']
                             percent_change = stock_day_data['percent_change']
@@ -52,7 +48,7 @@ def pull_gnw_stories_ticker_date(csv_input, csv_output):
               'max_day_percent_change', 'title', 'description', 'url', 'same_or_prev']
     output = []
 
-    browser = globe_newswire.initialize_browser()
+    browser = initialize_browser()
     with open(csv_input, 'r') as csv_in:
         csv_reader = csv.reader(csv_in)
         header_throwaway = next(csv_reader)
@@ -105,7 +101,7 @@ def old_gnw_news_from_search_term(search_term, pages):
     :param pages: Numebr of pages to traverse of returned stories
     :return: Nothing
     """
-    browser = globe_newswire.initialize_browser()
+    browser = initialize_browser()
 
     # Initialize the file output (write the header)
     header = ['date', 'ticker', 'title', 'description', 'url']
@@ -124,10 +120,10 @@ def old_gnw_news_from_search_term(search_term, pages):
         url = 'https://www.globenewswire.com/search/lang/en/exchange/nyse,nasdaq/keyword/' \
               + search_term + '?page=' + str(page)
 
-        search_page_details = globe_newswire.get_stories_from_search_page(url, browser)
+        search_page_details = get_stories_from_search_page(url, browser)
         with open(csv_name, 'a+') as csvout:
             for story in search_page_details:
-                date = story.date
+                date = story.date_time
                 ticker = story.ticker
                 title_text = story.title
                 heading_text = story.description
