@@ -2,15 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="10f3cb01-cb5c-4f18-b34f-b8e873b14699" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/csv_work.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alerts_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/alerts_main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_wire.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/csv_work.py" beforeDir="false" afterPath="$PROJECT_DIR$/csv_work.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/globe_newswire.py" beforeDir="false" afterPath="$PROJECT_DIR$/globe_newswire.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrape_old_business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrape_old_business_wire.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrape_old_gnw.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrape_old_gnw.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sentiment_analysis_research.py" beforeDir="false" afterPath="$PROJECT_DIR$/sentiment_analysis_research.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stock_alert_classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/stock_alert_classes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stocks_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/stocks_info.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -267,7 +263,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618379555352</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Added method to compare publish time to historical stock movement to determine if the story might be the cause of the price movement.">
+      <created>1618984316920</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1618984316921</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -282,6 +285,7 @@
     <MESSAGE value="Partially refactored to include a tiker object, which includes exchange. Needs more work." />
     <MESSAGE value="Refactored to include exchange in ticker object, ability to match multiple tickers in a headline, and alert and log for multiple tickers per story. Also, refactored to make url the unique to check against for stories." />
     <MESSAGE value="Improved fetching of article text from urls. Now it cuts out extra paragraphs explaining the companies and other lower-level details, leaving only the press announcement." />
-    <option name="LAST_COMMIT_MESSAGE" value="Improved fetching of article text from urls. Now it cuts out extra paragraphs explaining the companies and other lower-level details, leaving only the press announcement." />
+    <MESSAGE value="Added method to compare publish time to historical stock movement to determine if the story might be the cause of the price movement." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added method to compare publish time to historical stock movement to determine if the story might be the cause of the price movement." />
   </component>
 </project>

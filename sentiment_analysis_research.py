@@ -47,9 +47,8 @@ def stanza_sentiment(text):
     return sentiment / sentences
 
 
-def get_sentiments(title, description, url):
+def get_sentiments(title, description, article_text):
     # TODO - Add Stanza sentiment analysis
-    article_text = pull_article(url)
 
     nltk_pos_minus_neg_title = vader_pos_minus_neg_sentiment(title)
     nltk_pos_minus_neg_description = vader_pos_minus_neg_sentiment(description)
@@ -64,9 +63,12 @@ def get_sentiments(title, description, url):
 
     return {"nltk_pos_minus_neg_title": nltk_pos_minus_neg_title,
             "nltk_pos_minus_neg_description": nltk_pos_minus_neg_description,
-            "nltk_pos_minus_neg_article": nltk_pos_minus_neg_article, "nltk_compound_title": nltk_compound_title,
-            "nltk_compound_description": nltk_compound_description, "nltk_compound_article": nltk_compound_article,
-            "tb_polarity_title": tb_polarity_title, "tb_polarity_description": tb_polarity_description,
+            "nltk_pos_minus_neg_article": nltk_pos_minus_neg_article,
+            "nltk_compound_title": nltk_compound_title,
+            "nltk_compound_description": nltk_compound_description,
+            "nltk_compound_article": nltk_compound_article,
+            "tb_polarity_title": tb_polarity_title,
+            "tb_polarity_description": tb_polarity_description,
             "tb_polarity_article": tb_polarity_article,
             "stanza_sentiment_article": stanza_sentiment_article}
 

@@ -142,6 +142,7 @@ def get_daily_response_iex(ticker, date, token='Prod'):
     Gets daiy stock market data for a ticker/date
     :param ticker: Company ticker
     :param date: Date
+    :param token: Token for iex
     :return: Response from API
     """
     date_object = datetime.date.today()

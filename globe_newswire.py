@@ -57,10 +57,12 @@ def pull_article_gnw(url):
             break
 
     p_elems_article = p_elems_all[:split_index]
+    description = p_elems_article[0].text
     article_text = ' '.join([p.text for p in p_elems_article])
     tickers = get_exchange_tickers_description(article_text)
 
-    return {'title': title, 'date_time': date_time_eastern_object, 'tickers': tickers, 'article_text': article_text}
+    return {'article_object': NewsArticle(date_time_eastern_object, title, tickers, description, url, 'Globe Newswire'),
+            'article_text': article_text}
 
 
 def ping_gnw_rss_news_feed(url):
