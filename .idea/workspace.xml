@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="10f3cb01-cb5c-4f18-b34f-b8e873b14699" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/StockAlerts.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/StockAlerts.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_wire.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/csv_work.py" beforeDir="false" afterPath="$PROJECT_DIR$/csv_work.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/globe_newswire.py" beforeDir="false" afterPath="$PROJECT_DIR$/globe_newswire.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentiment_analysis_research.py" beforeDir="false" afterPath="$PROJECT_DIR$/sentiment_analysis_research.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stocks_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/stocks_info.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,11 +34,11 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
+    <property name="settings.editor.selected.configurable" value="preferences.toDoOptions" />
   </component>
-  <component name="RunManager" selected="Python.csv_work">
+  <component name="RunManager" selected="Python.scrape_old_business_wire">
     <configuration name="alerts_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="FDAApprovals" />
+      <module name="StockAlerts" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -60,7 +59,7 @@
       <method v="2" />
     </configuration>
     <configuration name="business_wire" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="FDAApprovals" />
+      <module name="StockAlerts" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -80,35 +79,14 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="csv_work" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="FDAApprovals" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/csv_work.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="scrape_old_business_wire" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <module name="FDAApprovals" />
+      <module name="StockAlerts" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="$USER_HOME$/.conda/envs/FDAApprovals/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/.conda/envs/StockAlerts/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -123,7 +101,7 @@
       <method v="2" />
     </configuration>
     <configuration name="scratch_2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="FDAApprovals" />
+      <module name="StockAlerts" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -143,8 +121,29 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="stocks_info" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="FDAApprovals" />
+    <configuration name="scratch_3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="StockAlerts" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch_3.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="stocks_info" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="StockAlerts" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -164,13 +163,20 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.alerts_main" />
+      <item itemvalue="Python.business_wire" />
+      <item itemvalue="Python.scrape_old_business_wire" />
+      <item itemvalue="Python.scratch_2" />
+      <item itemvalue="Python.scratch_3" />
+      <item itemvalue="Python.stocks_info" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.csv_work" />
+        <item itemvalue="Python.scratch_3" />
         <item itemvalue="Python.alerts_main" />
         <item itemvalue="Python.scratch_2" />
         <item itemvalue="Python.business_wire" />
-        <item itemvalue="Python.stocks_info" />
       </list>
     </recent_temporary>
   </component>
@@ -270,7 +276,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618984316921</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Rearranged some stuff in the csv work so it hopefully doesn't time out. Added sentiment analysis to the csv work. Still need to add in the API call in csv work too.">
+      <created>1619072184908</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1619072184908</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -286,6 +299,7 @@
     <MESSAGE value="Refactored to include exchange in ticker object, ability to match multiple tickers in a headline, and alert and log for multiple tickers per story. Also, refactored to make url the unique to check against for stories." />
     <MESSAGE value="Improved fetching of article text from urls. Now it cuts out extra paragraphs explaining the companies and other lower-level details, leaving only the press announcement." />
     <MESSAGE value="Added method to compare publish time to historical stock movement to determine if the story might be the cause of the price movement." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added method to compare publish time to historical stock movement to determine if the story might be the cause of the price movement." />
+    <MESSAGE value="Rearranged some stuff in the csv work so it hopefully doesn't time out. Added sentiment analysis to the csv work. Still need to add in the API call in csv work too." />
+    <option name="LAST_COMMIT_MESSAGE" value="Rearranged some stuff in the csv work so it hopefully doesn't time out. Added sentiment analysis to the csv work. Still need to add in the API call in csv work too." />
   </component>
 </project>

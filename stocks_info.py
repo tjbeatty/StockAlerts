@@ -5,6 +5,8 @@ import datetime
 import re
 from stock_alert_classes import CompanyTicker
 
+# TODO - Add support for this: GET /stock/{symbol}/advanced-stats
+
 
 def get_ticker_objects_from_description(description):
     """
@@ -164,7 +166,17 @@ def get_daily_response_iex(ticker, date, token='Prod'):
         return {}
 
 
-def get_percent_change_from_date_iex(ticker, date, token='Prod'):
+def get_average_volume(ticker):
+    token = 'pk_b7f4919ac9bc46499092ab5ad36a59e4'
+    url = 'https://cloud.iexapis.com/stable/stock/' + ticker + '/quote/avgTotalVolume' + \
+          '?token=' + token
+    print(url)
+    response = requests.get(url)
+    data = response.json()
+    return data
+
+
+def get_data_ticker_date_iex(ticker, date, token='Prod'):
     """
     Returns the intraday stock percent change for a ticker and date
     :param ticker:
@@ -184,7 +196,8 @@ def get_percent_change_from_date_iex(ticker, date, token='Prod'):
         percent_change = (close_price - open_price) / open_price
         max_percent_change = (high_price - open_price) / open_price
 
-        return {'volume': volume, 'percent_change': percent_change, 'max_percent_change': max_percent_change}
+        return {'open_price': open_price, 'close_price': close_price, 'volume': volume,
+                'percent_change': percent_change, 'max_percent_change': max_percent_change}
 
 
 def retrieve_ticker_from_name(name):
