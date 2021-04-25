@@ -125,7 +125,7 @@ def send_alert_to_slack(alert):
     :param alert: Formatted text for Slack alert
     :return: Nothing
     """
-    client = slack.WebClient(token='xoxb-181014212021-1852663037783-J5QEPYmiqQwGtfeTi6oe73PZ')
+    client = slack.WebClient(token='')
     client.chat_postMessage(channel='business-wire-alerts', type='mrkdwn', text=alert)
 
 

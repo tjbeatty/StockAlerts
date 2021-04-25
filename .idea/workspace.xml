@@ -1,41 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="10f3cb01-cb5c-4f18-b34f-b8e873b14699" name="Default Changelist" comment="Got some results in csv.">
-      <change afterPath="$PROJECT_DIR$/.idea/rSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/analysis_work.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/csvs/other_stories_edit.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retrieve_old_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FDA_bus_wire_stories_percent_change_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/FDA_bus_wire_stories_percent_change_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FDA_historical_business_wire_stories.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/FDA_historical_business_wire_stories.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alerts_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/alerts_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_wire.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/csv_work.py" beforeDir="false" afterPath="$PROJECT_DIR$/csv_work.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daily_stocks_20perc_bw_stories_SAVED.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/daily_stocks_20perc_bw_stories_SAVED.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daily_stocks_20perc_gnw_stories_SAVED.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/daily_stocks_20perc_gnw_stories_SAVED.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daily_stocks_20perc_loss.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/daily_stocks_20perc_loss.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daily_stocks_20perc_loss_bw_stories_SAVED.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/daily_stocks_20perc_loss_bw_stories_SAVED.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daily_stocks_20perc_loss_gnw_stories_SAVED.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/daily_stocks_20perc_loss_gnw_stories_SAVED.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/daily_stocks_20perc_xnys_xnas.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/daily_stocks_20perc_xnys_xnas.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/executive_announcements.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/executive_announcements.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/executive_announcements_filtered_date.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/executive_announcements_filtered_date.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extreme_events_gnw_bw_stories.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/extreme_events_gnw_bw_stories.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extreme_events_same_day_gnw_bw_stories.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/extreme_events_same_day_gnw_bw_stories.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fda_stories.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/fda_stories.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fda_stories_filtered.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/fda_stories_filtered.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial_stories.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/financial_stories.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial_stories_filtered_date.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/financial_stories_filtered_date.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/globe_newswire.py" beforeDir="false" afterPath="$PROJECT_DIR$/globe_newswire.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/investigations.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/investigations.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/investigations_filtered_date.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/investigations_filtered_date.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/keywords.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/keywords.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/other_stories.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/other_stories.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/positive_events_gnw_bw_stories.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/positive_events_gnw_bw_stories.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/positive_events_same_day_gnw_bw_stories.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csvs/positive_events_same_day_gnw_bw_stories.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrape_old_business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrape_old_business_wire.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrape_old_gnw.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrape_old_gnw.py" afterDir="false" />
-    </list>
+    <list default="true" id="10f3cb01-cb5c-4f18-b34f-b8e873b14699" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -351,7 +317,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619242260917</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Merging methods for retrieving old data from sources to make code simpler to maintain.">
+      <created>1619337178104</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1619337178104</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -380,6 +353,7 @@
     <MESSAGE value="Added method to compare publish time to historical stock movement to determine if the story might be the cause of the price movement." />
     <MESSAGE value="Rearranged some stuff in the csv work so it hopefully doesn't time out. Added sentiment analysis to the csv work. Still need to add in the API call in csv work too." />
     <MESSAGE value="Got some results in csv." />
-    <option name="LAST_COMMIT_MESSAGE" value="Got some results in csv." />
+    <MESSAGE value="Merging methods for retrieving old data from sources to make code simpler to maintain." />
+    <option name="LAST_COMMIT_MESSAGE" value="Merging methods for retrieving old data from sources to make code simpler to maintain." />
   </component>
 </project>
