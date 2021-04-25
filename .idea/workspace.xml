@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="10f3cb01-cb5c-4f18-b34f-b8e873b14699" name="Default Changelist" comment="" />
+    <list default="true" id="10f3cb01-cb5c-4f18-b34f-b8e873b14699" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/general_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alerts_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/alerts_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_wire.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/globe_newswire.py" beforeDir="false" afterPath="$PROJECT_DIR$/globe_newswire.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retrieve_old_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/retrieve_old_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stocks_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/stocks_info.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -40,7 +48,7 @@
       <recent name="$PROJECT_DIR$/csvs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.retrieve_old_data">
+  <component name="RunManager" selected="Python.alerts_main">
     <configuration name="alerts_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="StockAlerts" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -199,11 +207,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.alerts_main" />
         <item itemvalue="Python.retrieve_old_data" />
         <item itemvalue="Python.analysis_work" />
         <item itemvalue="Python.csv_work" />
         <item itemvalue="Python.scratch_3" />
-        <item itemvalue="Python.alerts_main" />
       </list>
     </recent_temporary>
   </component>
@@ -324,7 +332,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619337178104</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Removed Slack token">
+      <created>1619337581562</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1619337581562</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -354,6 +369,7 @@
     <MESSAGE value="Rearranged some stuff in the csv work so it hopefully doesn't time out. Added sentiment analysis to the csv work. Still need to add in the API call in csv work too." />
     <MESSAGE value="Got some results in csv." />
     <MESSAGE value="Merging methods for retrieving old data from sources to make code simpler to maintain." />
-    <option name="LAST_COMMIT_MESSAGE" value="Merging methods for retrieving old data from sources to make code simpler to maintain." />
+    <MESSAGE value="Removed Slack token" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed Slack token" />
   </component>
 </project>

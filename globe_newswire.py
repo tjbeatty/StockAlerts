@@ -7,8 +7,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import datetime
-from stocks_info import normalize_date_return_object, get_ticker_objects_from_description, \
-    get_exchange_tickers_description
+from general_functions import normalize_date_return_object, get_ticker_objects_from_description, \
+    get_exchange_tickers_description, is_english_story
 from time import sleep
 from stock_alert_classes import NewsArticle
 from bs4 import BeautifulSoup
@@ -59,7 +59,7 @@ def pull_article_gnw(url):
     p_elems_article = p_elems_all[:split_index]
     description = p_elems_article[0].text
     article_text = ' '.join([p.text for p in p_elems_article])
-    tickers = get_exchange_tickers_description(article_text)
+    tickers = get_ticker_objects_from_description(article_text)
 
     return {'article_object': NewsArticle(date_time_eastern_object, title, tickers, description, url, 'Globe Newswire'),
             'article_text': article_text}

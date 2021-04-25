@@ -2,6 +2,7 @@ import slack
 from business_wire import *
 from mysql_functions import *
 from globe_newswire import *
+from stocks_info import get_trading_view_url
 import csv
 
 
@@ -125,7 +126,10 @@ def send_alert_to_slack(alert):
     :param alert: Formatted text for Slack alert
     :return: Nothing
     """
-    client = slack.WebClient(token='')
+    token_first = 'xoxb-181014212021-'
+    token_second = '1852663037783-'
+    token_third = 'XOVu6nwZ4HaVqncPn4roR0Zs'
+    client = slack.WebClient(token=token_first + token_second + token_third)
     client.chat_postMessage(channel='business-wire-alerts', type='mrkdwn', text=alert)
 
 

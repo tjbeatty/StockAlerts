@@ -11,31 +11,6 @@ from stocks_info import get_ticker_objects_from_description, normalize_date_retu
 from stock_alert_classes import NewsArticle
 import traceback
 
-
-def is_english_story(url):
-    """
-    Checks url for language
-    :param url: URL of article
-    :return: True if it's an English artcle, False if not
-    """
-    if '/en/' in url:
-        return True
-    else:
-        return False
-
-
-def initialize_browser(arguments='headless'):
-    """
-    Initializes a browser for Selenium
-    :param arguments: arguments for browser setup
-    :return: Browser object
-    """
-    options = webdriver.ChromeOptions()
-    options.add_argument(arguments)
-    browser = webdriver.Chrome(options=options)
-    return browser
-
-
 def get_stories_from_search_page(url, source, browser):
     """
     Returns all stories from the current search page
