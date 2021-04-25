@@ -200,7 +200,7 @@ def execute_alert_system(rss_url, keywords, mysql_table):
     log_rss_ping(match_count, alerts_sent, tickers_logged_rss_ping, rss_url, 'rss_pings')
 
 
-keywords = import_keywords('keywords.csv')
+keywords = import_keywords('csvs/keywords.csv')
 fda_phrases = ['FDA', 'Phase 0', 'Phase 1', 'Phase 2', 'Phase 3', 'Phase I', 'Phase II', 'Phase III']
 financial_words = ['sales results', 'financials', 'letter to stakeholders', 'provides update', 'business update',
                    'financial results']

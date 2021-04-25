@@ -1,7 +1,7 @@
 import csv
 import os
 from business_wire import find_story_from_ticker_date, get_stories_from_search_page, initialize_browser
-from stocks_info import get_ticker_objects_from_description, convert_text_date_for_api, get_percent_change_from_date_iex
+from stocks_info import get_ticker_objects_from_description, convert_text_date_for_api, get_ticker_objects_from_description
 
 
 def pull_daily_change_for_all_bus_wire_articles(csv_input, csv_output):
@@ -27,7 +27,7 @@ def pull_daily_change_for_all_bus_wire_articles(csv_input, csv_output):
                     date_str = convert_text_date_for_api(date)
                     for ticker_object in ticker_objects:
                         ticker = ticker_object.ticker
-                        stock_day_data = get_percent_change_from_date_iex(ticker, date_str)
+                        stock_day_data = get_ticker_objects_from_description(ticker, date_str)
                         if stock_day_data:
                             volume = stock_day_data['volume']
                             percent_change = stock_day_data['percent_change']
@@ -86,46 +86,36 @@ def pull_bus_wire_news_stories_ticker_date(csv_input, csv_output):
                     csv_writer.writerow(row_out)
 
 
-def old_bus_wire_news_from_search_term(search_term, pages):
+def old_bus_wire_news_from_search_term(search_term, num_articles, browser, page_start=1):
     """
-    Pull all BusinessWire news related to a search term, up to a certain number of pages
+    Pull all BusinessWire news related to a search term, up to a certain number of articles
     :param search_term: Search term
-    :param pages: Number of result pages to retrieve articles from
+    :param num_articles: Number of article to retrieve
+    :param browser: The initialized Selinium browser
+    :param page_start: The search page to start on (in case
     :return: Outputs a CSV of all the articles
     """
-    browser = initialize_browser()
 
-    # Initialize the file output (write the header)
-    header = ['date', 'ticker', 'title', 'description', 'url']
-    csv_name = search_term + '_historical_business_wire_stories.csv'
+    articles_retrieved = 0
+    page = page_start
+    output = []
+    try:
+        while articles_retrieved < num_articles:
+            print("Found " + articles_retrieved + " articles...")
+            url = 'https://www.businesswire.com/portal/site/home/search/?searchType=news&searchTerm=' \
+                  + search_term + '&searchPage=' + str(page)
 
-    # Remove file if it already exists
-    if os.path.exists(csv_name):
-        os.remove(csv_name)
+            articles_found = get_stories_from_search_page(url, browser)
 
-    with open(csv_name, 'w') as csvout:
-        csv_writer = csv.writer(csvout)
-        csv_writer.writerow(header)
+            page = page + 1
+            articles_retrieved = articles_retrieved + 1
 
-    for page in range(1, pages+1):
-        print("Now on page #" + str(page) + "...")
-        url = 'https://www.businesswire.com/portal/site/home/search/?searchType=news&searchTerm=' \
-              + search_term + '&searchPage=' + str(page)
+            for story in articles_found:
+                output.append(story)
 
-        search_page_details = get_stories_from_search_page(url, browser)
-        with open(csv_name, 'a+') as csvout:
-            for story in search_page_details:
-                date = story.date_time
-                ticker = story.ticker
-                title_text = story.title
-                heading_text = story.description
-                url = story.url
-
-                output = [date, ticker, title_text, heading_text, url]
-                csv_writer = csv.writer(csvout)
-                csv_writer.writerow(output)
-
-    browser.quit()
+            return output
+    except:
+        return output
 
 
 

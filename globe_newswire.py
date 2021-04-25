@@ -197,10 +197,11 @@ def get_stories_from_search_page(url, browser):
 
         output = []
         for i, n in enumerate(urls):
-            ticker_object = get_ticker_objects_from_description(heading_text[i])
-            if ticker_object:
+            ticker_object_list = get_ticker_objects_from_description(heading_text[i])
+            if ticker_object_list:
                 date = normalize_date_return_object(date_text[i])
-                article_object = NewsArticle(date, title_text[i], ticker_object, heading_text[i], urls[i], 'Globe Newswire')
+                article_object = NewsArticle(date[i], title_text[i], ticker_object_list[i], heading_text[i],
+                                             urls[i], 'Globe Newswire')
                 output.append(article_object)
 
         return output

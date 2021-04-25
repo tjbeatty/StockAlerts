@@ -6,7 +6,7 @@ import datetime
 from globe_newswire import pull_article_date_time_gnw
 from business_wire import pull_article_date_time_bw
 from sentiment_analysis_research import pull_article, get_sentiments
-from stocks_info import get_data_ticker_date_iex, get_average_volume
+from stocks_info import get_ticker_objects_from_description, get_average_volume
 from json.decoder import JSONDecodeError
 
 
@@ -98,7 +98,17 @@ def organize_articles(filename_in):
 
 
 def retrieve_all_data_for_csv(filename_in, filename_out):
-    output = []
+    header = ['date', 'ticker', 'pct_change_prev_close', 'day_percent_change', 'max_day_percent_change', 'source',
+              'title', 'description', 'url', 'same_or_prev', 'date_time_story', 'nltk_pos_minus_neg_title',
+              'nltk_pos_minus_neg_description', 'nltk_pos_minus_neg_article', 'nltk_compound_title',
+              'nltk_compound_description', 'nltk_compound_article', 'tb_polarity_title', 'tb_polarity_description',
+              'tb_polarity_article', 'stanza_sentiment_article', 'open_price', 'close_price', 'percent_change',
+              'max_percent_change', 'volume', 'average_volume']
+
+    # with open(filename_out, 'w') as csv_out:
+    #     csv_writer = csv.writer(csv_out)
+    #     csv_writer.writerow(header)
+
     with open(filename_in, 'r') as csv_in:
         csv_reader = csv.reader(csv_in)
         header_throwaway = next(csv_reader)
@@ -138,7 +148,7 @@ def retrieve_all_data_for_csv(filename_in, filename_out):
                                        stanza_sentiment_article]
 
                     row.extend(sentiments_list)
-                    stock_date_info = get_data_ticker_date_iex(ticker, date)
+                    stock_date_info = get_ticker_objects_from_description(ticker, date)
 
                     open_price = stock_date_info['open_price']
                     close_price = stock_date_info['close_price']
@@ -149,24 +159,11 @@ def retrieve_all_data_for_csv(filename_in, filename_out):
 
                     stock_data_list = [open_price, close_price, percent_change, max_percent_change, volume, average_volume]
                     row.extend(stock_data_list)
-
-                    output.append(row)
+                    with open(filename_out, 'a+') as csv_out:
+                        csv_writer = csv.writer(csv_out)
+                        csv_writer.writerow(row)
                 except (IndexError, JSONDecodeError, TypeError):
                     None
-
-    header = ['date', 'ticker', 'pct_change_prev_close', 'day_percent_change', 'max_day_percent_change', 'source',
-              'title', 'description', 'url', 'same_or_prev', 'date_time_story', 'nltk_pos_minus_neg_title',
-              'nltk_pos_minus_neg_description', 'nltk_pos_minus_neg_article', 'nltk_compound_title',
-              'nltk_compound_description', 'nltk_compound_article', 'tb_polarity_title', 'tb_polarity_description',
-              'tb_polarity_article', 'stanza_sentiment_article', 'open_price', 'close_price', 'percent_change',
-              'max_percent_change', 'volume', 'average_volume']
-
-    with open(filename_out, 'w') as csv_out:
-        csv_writer = csv.writer(csv_out)
-        csv_writer.writerow(header)
-
-        for row in output:
-            csv_writer.writerow(row)
 
 
 # file_list = ['financial_stories', 'investigations', 'executive_announcements', 'other_stories']
@@ -174,4 +171,4 @@ def retrieve_all_data_for_csv(filename_in, filename_out):
 # for name in file_list:
 #     retrieve_all_data_for_csv(name + '.csv', name + '_filtered_date.csv')
 
-retrieve_all_data_for_csv('other_stories.csv', 'other_stories_filtered_date.csv')
+retrieve_all_data_for_csv('csvs/other_stories_edit.csv', 'csvs/other_stories_filtered_date.csv')

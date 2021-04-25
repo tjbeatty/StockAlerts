@@ -1,7 +1,7 @@
 import csv
 import os
 from globe_newswire import find_story_from_ticker_two_days, get_stories_from_search_page, initialize_browser
-from stocks_info import get_ticker_objects_from_description, convert_text_date_for_api, get_percent_change_from_date_iex
+from stocks_info import get_ticker_objects_from_description, convert_text_date_for_api
 
 
 # TODO - Get rid of this entire method. Have an identical one in scrape old bw
@@ -28,7 +28,7 @@ def pull_daily_change_for_all_gnw_articles(csv_input, csv_output):
                     date_str = convert_text_date_for_api(date)
                     for ticker_object in ticker_objects:
                         ticker = ticker_object.ticker
-                        stock_day_data = get_percent_change_from_date_iex(ticker, date_str)
+                        stock_day_data = get_ticker_objects_from_description(ticker, date_str)
                         if stock_day_data:
                             volume = stock_day_data['volume']
                             percent_change = stock_day_data['percent_change']
@@ -94,46 +94,35 @@ def pull_gnw_stories_ticker_date(csv_input, csv_output):
                     csv_writer.writerow(row_out)
 
 
-def old_gnw_news_from_search_term(search_term, pages):
+def old_gnw_news_from_search_term(search_term, num_articles, browser, page_start=1):
     """
     Finds older GlobeNewseire articles that are related to a search term
-    :param search_term: Search term to search for
-    :param pages: Numebr of pages to traverse of returned stories
-    :return: Nothing
+    :param search_term: Search term
+    :param num_articles: Number of article to retrieve
+    :param browser: The initialized Selinium browser
+    :param page_start: The search page to start on (in case
+    :return: Outputs a list of
     """
-    browser = initialize_browser()
+    articles_retrieved = 0
+    page = page_start
+    output = []
+    try:
+        while articles_retrieved < num_articles:
+            print("Found " + articles_retrieved + " articles...")
+            url = 'https://www.globenewswire.com/search/lang/en/exchange/nyse,nasdaq/keyword/' \
+                  + search_term + '?page=' + str(page)
 
-    # Initialize the file output (write the header)
-    header = ['date', 'ticker', 'title', 'description', 'url']
-    csv_name = search_term + '_historical_gnw_stories.csv'
+            articles_found = get_stories_from_search_page(url, browser)
 
-    # Remove file if it already exists
-    if os.path.exists(csv_name):
-        os.remove(csv_name)
+            page = page + 1
+            articles_retrieved = articles_retrieved + 1
 
-    with open(csv_name, 'w') as csvout:
-        csv_writer = csv.writer(csvout)
-        csv_writer.writerow(header)
+            for story in articles_found:
+                output.append(story)
 
-    for page in range(1, pages+1):
-        print("Now on page #" + str(page) + "...")
-        url = 'https://www.globenewswire.com/search/lang/en/exchange/nyse,nasdaq/keyword/' \
-              + search_term + '?page=' + str(page)
-
-        search_page_details = get_stories_from_search_page(url, browser)
-        with open(csv_name, 'a+') as csvout:
-            for story in search_page_details:
-                date = story.date_time
-                ticker = story.ticker
-                title_text = story.title
-                heading_text = story.description
-                url = story.url
-
-                output = [date, ticker, title_text, heading_text, url]
-                csv_writer = csv.writer(csvout)
-                csv_writer.writerow(output)
-
-    browser.quit()
+            return output
+    except:
+        return output
 
 
 # pull_gnw_stories_ticker_date('daily_stocks_20perc_loss.csv', 'daily_stocks_20perc_loss_gnw_stories.csv')

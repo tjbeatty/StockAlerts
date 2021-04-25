@@ -131,18 +131,6 @@ def initialize_browser():
     return browser
 
 
-def is_english_story(url):
-    """
-    Checks url for language
-    :param url: URL of article
-    :return: True if it's an English artcle, False if not
-    """
-    if '/en/' in url:
-        return True
-    else:
-        return False
-
-
 def get_stories_from_search_page(url, browser):
     """
     Retrieve all articles that exist on a search page
@@ -173,11 +161,11 @@ def get_stories_from_search_page(url, browser):
 
         output = []
         for i, n in enumerate(urls):
-            ticker_object = get_ticker_objects_from_description(heading_text[i])
-            if is_english_story(urls[i]) and ticker_object:
+            ticker_object_list = get_ticker_objects_from_description(heading_text[i])
+            if is_english_story(urls[i]) and ticker_object_list:
                 date = normalize_date_return_object(date_text[i])
-                article_object = NewsArticle(date, title_text[i], ticker_object, heading_text[i], urls[i],
-                                             'BusinessWire')
+                article_object = NewsArticle(date[i], title_text[i], ticker_object_list[i],
+                                             heading_text[i], urls[i], 'BusinessWire')
                 output.append(article_object)
 
         return output
