@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import datetime
 from general_functions import normalize_date_return_object, get_ticker_objects_from_description, \
-    get_exchange_tickers_description, is_english_story
+    get_exchange_tickers_description, is_english_story, initialize_browser
 from time import sleep
 from stock_alert_classes import NewsArticle
 from bs4 import BeautifulSoup
@@ -121,18 +121,6 @@ def filter_gnw_news_feed_with_nonsequential_keywords(url, keywords):
     return output
 
 
-def initialize_browser(arguments='headless'):
-    """
-    Initializes a browser for Selenium
-    :param arguments: arguments for browser setup
-    :return: Browser object
-    """
-    options = webdriver.ChromeOptions()
-    options.add_argument(arguments)
-    browser = webdriver.Chrome(options=options)
-    return browser
-
-
 def check_for_no_stories(browser):
     """
     Looks at the Selenium browser page to determine if there were no stories returned for the search
@@ -140,8 +128,7 @@ def check_for_no_stories(browser):
     :return: True, if no articles returned. False, if articles on page
     """
     try:
-        no_stories = browser.find_element_by_xpath('/html/body/div[1]/div[2]/div/p').text
-        if 'No articles were found' in no_stories:
+        if 'No articles were found' in browser.find_element_by_xpath('/html/body/div[1]/div[2]/div/p').text:
             return True
         else:
             return False
@@ -179,7 +166,7 @@ def get_stories_from_search_page(url, browser):
 
     try:
         if check_for_no_stories(browser):
-            return []
+            return None
 
         # Wait until the bottom image element loads before reading in data.
         WebDriverWait(browser, timeout). \

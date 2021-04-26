@@ -15,6 +15,23 @@ from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 
 
+def check_for_no_stories(browser):
+    """
+    Looks at the Selenium browser page to determine if there were no stories returned for the search
+    :param browser: Browser object
+    :return: True, if no articles returned. False, if articles on page
+    """
+    try:
+        no_stories = browser.find_element_by_xpath('//*[@id="bw-group-all"]/div/div/div[3]/section/h2').text
+        print(no_stories)
+        if 'no results found' in no_stories:
+            return True
+        else:
+            return False
+    except NoSuchElementException:
+        return False
+
+
 def pull_article_date_time_bw(url):
     """
     Returns the datetime object a Business Wire article was published
@@ -119,13 +136,13 @@ def filter_bus_wire_news_feed_with_nonsequential_keywords(url, keywords):
     return output
 
 
-def initialize_browser():
+def initialize_browser(arguments='headless'):
     """
     Initialized Chrome browser for Selenium
     :return: Browser object
     """
     options = webdriver.ChromeOptions()
-    options.add_argument('headless')
+    options.add_argument(arguments)
     browser = webdriver.Chrome(options=options)
     return browser
 
@@ -141,6 +158,9 @@ def get_stories_from_search_page(url, browser):
     timeout = 20
 
     try:
+        if check_for_no_stories(browser):
+            print(check_for_no_stories())
+            return None
         # Wait until the bottom image element loads before reading in data.
         WebDriverWait(browser, timeout). \
             until(EC.visibility_of_element_located((By.XPATH, '//*[@id="bw-group-all"]/div/div/div[3]/'

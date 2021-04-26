@@ -99,4 +99,3 @@ def normalize_date_return_object(date_string):
 
     if date_object:
         return date_object
-

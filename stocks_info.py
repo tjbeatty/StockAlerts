@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 import requests
 import datetime
+from general_functions import normalize_date_return_object
 
 # TODO - Add support for this: GET /stock/{symbol}/advanced-stats
 
@@ -64,20 +65,27 @@ def get_percent_change_from_date_polygon(ticker, date):
     return percent_change
 
 
-def get_daily_response_iex(ticker, date, token='Prod'):
+def get_token_iex(token_type='Prod'):
+    if token_type.lower() == 'prod':
+        token = 'pk_b7f4919ac9bc46499092ab5ad36a59e4'
+    elif 'sand' in token_type.lower():
+        token = 'Tpk_958d6bd4a69346e2bcbee47881694efa'
+    else:
+        token = 'pk_b7f4919ac9bc46499092ab5ad36a59e4'
+    return token
+
+
+def get_daily_response_iex(ticker, date, token_type='Prod'):
     """
     Gets daiy stock market data for a ticker/date
     :param ticker: Company ticker
     :param date: Date
-    :param token: Token for iex
+    :param token_type: Prod or Sandbox
     :return: Response from API
     """
     date_object = datetime.date.today()
-    if token.lower() == 'prod':
-        token = 'pk_b7f4919ac9bc46499092ab5ad36a59e4'
-    elif token.lower() == 'sandbox':
-        token = 'Tpk_958d6bd4a69346e2bcbee47881694efa'
 
+    token = get_token_iex(token_type)
     date_object = normalize_date_return_object(date)
 
     try:
@@ -91,8 +99,8 @@ def get_daily_response_iex(ticker, date, token='Prod'):
         return {}
 
 
-def get_average_volume(ticker):
-    token = 'pk_b7f4919ac9bc46499092ab5ad36a59e4'
+def get_average_volume(ticker, token_type='Prod'):
+    token = get_token_iex(token_type)
     url = 'https://cloud.iexapis.com/stable/stock/' + ticker + '/quote/avgTotalVolume' + \
           '?token=' + token
     print(url)
@@ -101,15 +109,15 @@ def get_average_volume(ticker):
     return data
 
 
-def get_data_ticker_date_iex(ticker, date, token='Prod'):
+def get_data_ticker_date_iex(ticker, date, token_type='Prod'):
     """
     Returns the intraday stock percent change for a ticker and date
     :param ticker:
     :param date: Date
-    :param token: Token to access API
+    :param token_type: Prod or Sandbox
     :return: Dictionary of volume intraday percent change and max possible percent change
     """
-
+    token = get_token_iex(token_type)
     api_response = get_daily_response_iex(ticker, date, token)
     if api_response.status_code == 200:
         data = api_response.json()
@@ -123,6 +131,24 @@ def get_data_ticker_date_iex(ticker, date, token='Prod'):
 
         return {'open_price': open_price, 'close_price': close_price, 'volume': volume,
                 'percent_change': percent_change, 'max_percent_change': max_percent_change}
+
+
+def get_next_trading_day_iex(date_object, token_type='Prod'):
+    token = get_token_iex(token_type)
+
+    # Subtract one day from date_object because the API returns the next day even if current day is a trade day
+    date_object = date_object - datetime.timedelta(1)
+
+    date_str = date_object.strftime('%Y%m%d')
+    url = 'https://cloud.iexapis.com/stable/ref-data/us/dates/trade/next/1/' + date_str + \
+          '?token=' + token
+    api_response = requests.get(url)
+    if api_response.status_code == 200:
+        data = api_response.json()
+        next_trade_date = data[0]['date']
+        return next_trade_date
+    else:
+        return None
 
 
 def retrieve_ticker_from_name(name):
@@ -165,9 +191,24 @@ def get_trading_view_url(ticker_object):
     return url
 
 
-# print(get_percent_change_from_date_iex('TSLA', '02/02/2021'))
+def date_article_reflected_in_stock(date_object):
+    bell_close = datetime.datetime.strptime('16:30', '%H:%M').time()
+    time = date_object.time()
+    article_date = date_object.date()
+
+    if time > bell_close:
+        stock_date = article_date + datetime.timedelta(1)
+    else:
+        stock_date = article_date
+
+    output = get_next_trading_day_iex(stock_date)
+
+    return output
+
+# print(get_data_ticker_date_iex('TSLA', '02/02/2021'))
 
 # tickers = get_ticker_from_description('SAN DIEGO, CA, April  14, 2021  (GLOBE NEWSWIRE) -- GreenBox (POS NASDAQ: GBOX) ("GreenBox" or "the Company"), an emerging financial technology company leveraging proprietary blockchain security to build customized payment solutions, today announced the company has selected Signature Bank (Nasdaq: SBNY), a New York-based, full-service commercial bank, as the banking solution to meet its smart-contract token infrastructure needs.')
 #
 # for ticker in tickers:
 #     print(ticker.ticker)
+

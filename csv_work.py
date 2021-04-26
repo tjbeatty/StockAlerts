@@ -6,22 +6,12 @@ import datetime
 from globe_newswire import pull_article_date_time_gnw
 from business_wire import pull_article_date_time_bw
 from sentiment_analysis_research import pull_article, get_sentiments
-from stocks_info import get_ticker_objects_from_description, get_average_volume
+from stocks_info import get_average_volume
+from general_functions import get_ticker_objects_from_description, date_article_reflected_in_stock
 from json.decoder import JSONDecodeError
 
 
 # TODO - pull company data for date
-def apply_article_same_or_next_day(date_object):
-    bell_close = datetime.datetime.strptime('16:30', '%H:%M').time()
-    time = date_object.time()
-    article_date = date_object.date()
-
-    if time > bell_close:
-        stock_date = article_date + datetime.timedelta(1)
-    else:
-        stock_date = article_date
-
-    return stock_date
 
 
 # output = []
@@ -34,8 +24,7 @@ def organize_articles(filename_in):
     executive_announcements = []
     other_stories = []
     fda_words = ['fda', 'phase 1', 'phase 2', 'phase 3', 'phase i', 'phase ii', 'phase iii', 'phase 0',
-                 'pharmaceuticals',
-                 'therapeutics', 'medical']
+                 'pharmaceuticals', 'therapeutics', 'medical']
     financial_words = ['sales results', 'financials', 'provides update', 'business update', 'financial results',
                        'first quarter', 'second quarter', 'third quarter', 'fourth quarter', 'full year', 'year end',
                        'first-quarter', 'second-quarter', 'third-quarter', 'fourth-quarter', 'full-year', 'year-end',
@@ -117,13 +106,13 @@ def retrieve_all_data_for_csv(filename_in, filename_out):
             [date, ticker, pct_change_prev_close, day_percent_change, max_day_percent_change, source, title,
              description, url, same_or_prev] = row
 
-            article = pull_article(url)
-            article_date_time = article['article_object'].date_time
-            article_text = article['article_text']
+            article_obj_and_text = pull_article(url)
+            article_date_time = article_obj_and_text['article_object'].date_time
+            article_text = article_obj_and_text['article_text']
             article_dt_str = article_date_time.strftime('%m/%d/%Y %H:%M')
             article_date = article_date_time.date()
             # If the article was after 4:30, it will apply to the next day's stock change
-            article_stock_affect_date = apply_article_same_or_next_day(article_date_time)
+            article_stock_affect_date = date_article_reflected_in_stock(article_date_time)
             row.append(article_dt_str)
 
             if (article_date == article_stock_affect_date and same_or_prev == 'same') or \

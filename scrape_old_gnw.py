@@ -1,7 +1,8 @@
 import csv
 import os
 from globe_newswire import find_story_from_ticker_two_days, get_stories_from_search_page, initialize_browser
-from stocks_info import get_ticker_objects_from_description, convert_text_date_for_api
+from stocks_info import get_data_ticker_date_iex, convert_text_date_for_api
+from general_functions import get_ticker_objects_from_description
 
 
 # TODO - Get rid of this entire method. Have an identical one in scrape old bw
@@ -28,7 +29,7 @@ def pull_daily_change_for_all_gnw_articles(csv_input, csv_output):
                     date_str = convert_text_date_for_api(date)
                     for ticker_object in ticker_objects:
                         ticker = ticker_object.ticker
-                        stock_day_data = get_ticker_objects_from_description(ticker, date_str)
+                        stock_day_data = get_data_ticker_date_iex(ticker, date_str)
                         if stock_day_data:
                             volume = stock_day_data['volume']
                             percent_change = stock_day_data['percent_change']
