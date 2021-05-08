@@ -5,6 +5,7 @@ from globe_newswire import *
 from stocks_info import get_trading_view_url
 import csv
 
+# TODO - Add PR Newswire
 
 def import_keywords(file_in):
     """
@@ -205,7 +206,8 @@ def execute_alert_system(rss_url, keywords, mysql_table):
 
 
 keywords = import_keywords('csvs/keywords.csv')
-fda_phrases = ['FDA', 'Phase 0', 'Phase 1', 'Phase 2', 'Phase 3', 'Phase I', 'Phase II', 'Phase III']
+fda_phrases = ['FDA', 'Phase 0', 'Phase 1', 'Phase 2', 'Phase 3', 'Phase I', 'Phase II', 'Phase III', 'clinical stage',
+               'pharmaceuticals', 'biotech', 'MHRA']
 financial_words = ['sales results', 'financials', 'letter to stakeholders', 'provides update', 'business update',
                    'financial results']
 
@@ -232,6 +234,6 @@ rss_feeds = [gnw_public_company_rss, bw_tech_rss, bw_energy_rss, bw_defense_rss,
              bw_trade_show_rss, bw_transport_rss, bw_travel_rss, bw_vc_rss]
 
 for feed in rss_feeds:
-    execute_alert_system(feed, keywords, 'story_alerts')
+    execute_alert_system(feed, fda_phrases, 'story_alerts')
 
 # print(ping_bus_wire_rss_news_feed(bw_health_rss))

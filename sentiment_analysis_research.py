@@ -13,20 +13,6 @@ from business_wire import pull_article_bw
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 
-def pull_article(url):
-    """
-    Pulls article text from a GNW or BW text
-    :param url:
-    :return: Article text, if present. False if no text present
-    """
-    if 'globenewswire' in url.lower():
-        return pull_article_gnw(url)
-    elif 'businesswire' in url.lower():
-        return pull_article_bw(url)
-    else:
-        return False
-
-
 def vader_pos_minus_neg_sentiment(text, vader=SentimentIntensityAnalyzer()):
     return vader.polarity_scores(text)['pos'] - vader.polarity_scores(text)['neg']
 
@@ -48,7 +34,6 @@ def stanza_sentiment(text):
 
 
 def get_sentiments(title, description, article_text):
-    # TODO - Add Stanza sentiment analysis
 
     nltk_pos_minus_neg_title = vader_pos_minus_neg_sentiment(title)
     nltk_pos_minus_neg_description = vader_pos_minus_neg_sentiment(description)

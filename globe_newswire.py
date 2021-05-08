@@ -13,6 +13,7 @@ from time import sleep
 from stock_alert_classes import NewsArticle
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 
 def pull_article_date_time_gnw(url):
@@ -38,31 +39,41 @@ def pull_article_gnw(url):
     :param url: GlobeNewswire URL
     :return: Article text
     """
-    page = urlopen(url)
-    soup = BeautifulSoup(page, 'html.parser')
+    try:
+        page = urlopen(url)
+        soup = BeautifulSoup(page, 'html.parser')
 
-    all_page_text = soup.find('div', id='main-body-container')
-    title = soup.find('h2').text
-    date_time_str = soup.find('time')['datetime']
-    date_time_utc_object = datetime.datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%SZ').\
-        replace(tzinfo=timezone('UTC'))
-    date_time_eastern_object = date_time_utc_object.astimezone(timezone('US/Eastern'))
-    p_elems_all = all_page_text.findAll('p')
-    split_index = len(p_elems_all)
+        all_page_text = soup.find('div', id='main-body-container')
 
-    for i, p in enumerate(p_elems_all):
-        # Find <p> element that starts with "About" to split
-        if re.match('^[ |\n]*about', p.text.lower()):
-            split_index = i
-            break
+        # Sometimes title is h2, sometimes it is h1
+        title = soup.find('h2')
+        if title is None:
+            title = soup.find('h1')
+        title = title.text
 
-    p_elems_article = p_elems_all[:split_index]
-    description = p_elems_article[0].text
-    article_text = ' '.join([p.text for p in p_elems_article])
-    tickers = get_ticker_objects_from_description(article_text)
+        date_time_str = soup.find('time')['datetime']
+        date_time_utc_object = datetime.datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%SZ').\
+            replace(tzinfo=timezone('UTC'))
+        date_time_eastern_object = date_time_utc_object.astimezone(timezone('US/Eastern'))
+        p_elems_all = all_page_text.findAll('p')
+        split_index = len(p_elems_all)
 
-    return {'article_object': NewsArticle(date_time_eastern_object, title, tickers, description, url, 'Globe Newswire'),
-            'article_text': article_text}
+        for i, p in enumerate(p_elems_all):
+            # Find <p> element that starts with "About" to split
+            if re.match('^[ |\n]*about', p.text.lower()):
+                split_index = i
+                break
+
+        p_elems_article = p_elems_all[:split_index]
+        description = p_elems_article[0].text
+        article_text = ' '.join([p.text for p in p_elems_article])
+        tickers = get_ticker_objects_from_description(article_text)
+
+        return {'article_object': NewsArticle(date_time_eastern_object, title, tickers, description, url, 'Globe Newswire'),
+                'article_text': article_text}
+    except (AttributeError, HTTPError, TimeoutError, NoneType) as e:
+        print(e)
+        return None
 
 
 def ping_gnw_rss_news_feed(url):

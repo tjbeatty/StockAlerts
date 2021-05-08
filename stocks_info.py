@@ -3,6 +3,7 @@ import urllib.request
 import requests
 import datetime
 from general_functions import normalize_date_return_object
+import json
 
 # TODO - Add support for this: GET /stock/{symbol}/advanced-stats
 
@@ -99,6 +100,17 @@ def get_daily_response_iex(ticker, date, token_type='Prod'):
         return {}
 
 
+# TODO - Add getting shares outstanding so we can calculate market cap on a specific date
+def get_shares_outstanding(ticker, token_type='Prod'):
+    token = get_token_iex(token_type)
+    url = 'https://cloud.iexapis.com/stable/stock/' + ticker + '/stats/sharesOutstanding' + \
+          '?token=' + token
+    print(url)
+    response = requests.get(url)
+    data = response.json()
+    return data
+
+
 def get_average_volume(ticker, token_type='Prod'):
     token = get_token_iex(token_type)
     url = 'https://cloud.iexapis.com/stable/stock/' + ticker + '/quote/avgTotalVolume' + \
@@ -125,12 +137,15 @@ def get_data_ticker_date_iex(ticker, date, token_type='Prod'):
         volume = data[0]['volume']
         close_price = data[0]['close']
         high_price = data[0]['high']
+        low_price = data[0]['low']
 
         percent_change = (close_price - open_price) / open_price
         max_percent_change = (high_price - open_price) / open_price
+        min_percent_change = (low_price - open_price) / open_price
 
         return {'open_price': open_price, 'close_price': close_price, 'volume': volume,
-                'percent_change': percent_change, 'max_percent_change': max_percent_change}
+                'percent_change': percent_change, 'max_percent_change': max_percent_change,
+                'min_percent_change': min_percent_change}
 
 
 def get_next_trading_day_iex(date_object, token_type='Prod'):
@@ -147,6 +162,53 @@ def get_next_trading_day_iex(date_object, token_type='Prod'):
         data = api_response.json()
         next_trade_date = data[0]['date']
         return next_trade_date
+    else:
+        return None
+
+
+def get_company_info_iex(ticker, token_type='Prod'):
+    token = get_token_iex(token_type)
+
+    url = 'https://cloud.iexapis.com/stable/stock/' + ticker + '/company?token=' + token
+
+    api_response = requests.get(url)
+    if api_response.status_code == 200:
+        data = api_response.json()
+        tags = data['tags']
+        country = data['country']
+        employees = data['employees']
+        primary_sic_code = data['primarySicCode']
+        symbol = data['symbol']
+        return {'ticker': symbol, 'tags': tags, 'country': country, 'employees': employees,
+                'primary_sic_code': primary_sic_code}
+    else:
+        return None
+
+
+def get_key_stats_iex(ticker, token_type='Prod'):
+    token = get_token_iex(token_type)
+
+    url = 'https://cloud.iexapis.com/stable/stock/' + ticker + '/stats?token=' + token
+
+    api_response = requests.get(url)
+    if api_response.status_code == 200:
+        data = api_response.json()
+
+        return data
+    else:
+        return None
+
+
+def get_advanced_stats_iex(ticker, token_type='Prod'):
+    token = get_token_iex(token_type)
+
+    url = 'https://cloud.iexapis.com/stable/stock/' + ticker + '/advanced-stats?token=' + token
+
+    api_response = requests.get(url)
+    if api_response.status_code == 200:
+        data = api_response.json()
+
+        return data
     else:
         return None
 
@@ -192,7 +254,7 @@ def get_trading_view_url(ticker_object):
 
 
 def date_article_reflected_in_stock(date_object):
-    bell_close = datetime.datetime.strptime('16:30', '%H:%M').time()
+    bell_close = datetime.datetime.strptime('16:00', '%H:%M').time()
     time = date_object.time()
     article_date = date_object.date()
 
@@ -204,11 +266,4 @@ def date_article_reflected_in_stock(date_object):
     output = get_next_trading_day_iex(stock_date)
 
     return output
-
-# print(get_data_ticker_date_iex('TSLA', '02/02/2021'))
-
-# tickers = get_ticker_from_description('SAN DIEGO, CA, April  14, 2021  (GLOBE NEWSWIRE) -- GreenBox (POS NASDAQ: GBOX) ("GreenBox" or "the Company"), an emerging financial technology company leveraging proprietary blockchain security to build customized payment solutions, today announced the company has selected Signature Bank (Nasdaq: SBNY), a New York-based, full-service commercial bank, as the banking solution to meet its smart-contract token infrastructure needs.')
-#
-# for ticker in tickers:
-#     print(ticker.ticker)
 

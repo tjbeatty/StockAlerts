@@ -2,14 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="10f3cb01-cb5c-4f18-b34f-b8e873b14699" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/rGraphicsSettings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ml_model_work.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/process_text_files.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alerts_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/alerts_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis_work.py" beforeDir="false" afterPath="$PROJECT_DIR$/analysis_work.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_wire.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/csv_work.py" beforeDir="false" afterPath="$PROJECT_DIR$/csv_work.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/general_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/general_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/globe_newswire.py" beforeDir="false" afterPath="$PROJECT_DIR$/globe_newswire.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/retrieve_old_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/retrieve_old_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrape_old_business_wire.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrape_old_business_wire.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scrape_old_gnw.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrape_old_gnw.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentiment_analysis_research.py" beforeDir="false" afterPath="$PROJECT_DIR$/sentiment_analysis_research.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stocks_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/stocks_info.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,8 +62,8 @@
       <recent name="$PROJECT_DIR$/csvs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.retrieve_old_data">
-    <configuration name="alerts_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.process_text_files">
+    <configuration name="globe_newswire" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="StockAlerts" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -71,7 +75,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/alerts_main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/globe_newswire.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -80,7 +84,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="analysis_work" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="process_text_files" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="StockAlerts" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -92,28 +96,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/analysis_work.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="csv_work" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="StockAlerts" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/csv_work.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/process_text_files.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -164,7 +147,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="scratch_3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="scratch" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="StockAlerts" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -176,7 +159,28 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch_3.py" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sentiment_analysis_research" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="StockAlerts" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sentiment_analysis_research.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -209,19 +213,19 @@
     <list>
       <item itemvalue="Python.scrape_old_business_wire" />
       <item itemvalue="Python.stocks_info" />
-      <item itemvalue="Python.alerts_main" />
-      <item itemvalue="Python.scratch_3" />
-      <item itemvalue="Python.csv_work" />
-      <item itemvalue="Python.analysis_work" />
       <item itemvalue="Python.retrieve_old_data" />
+      <item itemvalue="Python.sentiment_analysis_research" />
+      <item itemvalue="Python.globe_newswire" />
+      <item itemvalue="Python.process_text_files" />
+      <item itemvalue="Python.scratch" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.process_text_files" />
+        <item itemvalue="Python.scratch" />
         <item itemvalue="Python.retrieve_old_data" />
-        <item itemvalue="Python.analysis_work" />
-        <item itemvalue="Python.alerts_main" />
-        <item itemvalue="Python.csv_work" />
-        <item itemvalue="Python.scratch_3" />
+        <item itemvalue="Python.globe_newswire" />
+        <item itemvalue="Python.sentiment_analysis_research" />
       </list>
     </recent_temporary>
   </component>
@@ -356,7 +360,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619394115742</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Stable version to search terms on GNW and BW, grab sentiments, stock performance data, and immediately save it to a file.">
+      <created>1619422584079</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1619422584079</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -369,6 +380,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Refactored code to use BusinessWireArticle objects. Added code to normalize dates. Still need to enable finding articles on a specific date. Work has begun but not finished." />
@@ -388,6 +400,7 @@
     <MESSAGE value="Merging methods for retrieving old data from sources to make code simpler to maintain." />
     <MESSAGE value="Removed Slack token" />
     <MESSAGE value="Moved some stuff around into a &quot;general functions&quot; file. Broke up Slack token as a test." />
-    <option name="LAST_COMMIT_MESSAGE" value="Moved some stuff around into a &quot;general functions&quot; file. Broke up Slack token as a test." />
+    <MESSAGE value="Stable version to search terms on GNW and BW, grab sentiments, stock performance data, and immediately save it to a file." />
+    <option name="LAST_COMMIT_MESSAGE" value="Stable version to search terms on GNW and BW, grab sentiments, stock performance data, and immediately save it to a file." />
   </component>
 </project>

@@ -13,6 +13,7 @@ from general_functions import normalize_date_return_object, get_ticker_objects_f
 from stock_alert_classes import NewsArticle
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 
 def check_for_no_stories(browser):
@@ -55,31 +56,34 @@ def pull_article_bw(url):
     :param url: Business Wire URL
     :return: Article text
     """
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    page = urlopen(req).read()
-    soup = BeautifulSoup(page, 'html.parser')
-    title = soup.find('h1').text
-    date_time_str = soup.find('time')['datetime']
-    date_time_utc_object = datetime.datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%SZ').\
-        replace(tzinfo=timezone('UTC'))
-    date_time_eastern_object = date_time_utc_object.astimezone(timezone('US/Eastern'))
-    all_page_text = soup.find('div', itemprop='articleBody')
+    try:
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        page = urlopen(req).read()
+        soup = BeautifulSoup(page, 'html.parser')
+        title = soup.find('h1').text
+        date_time_str = soup.find('time')['datetime']
+        date_time_utc_object = datetime.datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%SZ').\
+            replace(tzinfo=timezone('UTC'))
+        date_time_eastern_object = date_time_utc_object.astimezone(timezone('US/Eastern'))
+        all_page_text = soup.find('div', itemprop='articleBody')
 
-    p_elems_all = all_page_text.findAll('p')
-    split_index = len(p_elems_all)
+        p_elems_all = all_page_text.findAll('p')
+        split_index = len(p_elems_all)
 
-    for i, p in enumerate(p_elems_all):
-        # Find <p> element that starts with "About" to split
-        if re.match('^[ |\n]*about', p.text.lower()):
-            split_index = i
-            break
+        for i, p in enumerate(p_elems_all):
+            # Find <p> element that starts with "About" to split
+            if re.match('^[ |\n]*about', p.text.lower()):
+                split_index = i
+                break
 
-    p_elems_article = p_elems_all[:split_index]
-    description = p_elems_article[0].text
-    article_text = ' '.join([p.text for p in p_elems_article])
-    tickers = get_ticker_objects_from_description(article_text)
-    return {'article_object': NewsArticle(date_time_eastern_object, title, tickers, description, url, 'Business Wire'),
-            'article_text': article_text}
+        p_elems_article = p_elems_all[:split_index]
+        description = p_elems_article[0].text
+        article_text = ' '.join([p.text for p in p_elems_article])
+        tickers = get_ticker_objects_from_description(article_text)
+        return {'article_object': NewsArticle(date_time_eastern_object, title, tickers, description, url, 'Business Wire'),
+                'article_text': article_text}
+    except (AttributeError, HTTPError, TimeoutError):
+        return None
 
 
 def ping_bus_wire_rss_news_feed(url):

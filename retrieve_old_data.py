@@ -7,12 +7,28 @@ from general_functions import get_ticker_objects_from_description, normalize_dat
     is_english_story, initialize_browser
 from stock_alert_classes import NewsArticle
 import traceback
-from sentiment_analysis_research import pull_article, get_sentiments
-from stocks_info import get_data_ticker_date_iex, get_average_volume, date_article_reflected_in_stock
+from stocks_info import get_data_ticker_date_iex, get_average_volume, date_article_reflected_in_stock, \
+    get_company_info_iex, get_shares_outstanding
 import csv
 from json.decoder import JSONDecodeError
 import os.path
 import re
+from globe_newswire import pull_article_gnw
+from business_wire import pull_article_bw
+
+
+def pull_article(url):
+    """
+    Pulls article text from a GNW or BW text
+    :param url:
+    :return: Article text, if present. False if no text present
+    """
+    if 'globenewswire' in url.lower():
+        return pull_article_gnw(url)
+    elif 'businesswire' in url.lower():
+        return pull_article_bw(url)
+    else:
+        return False
 
 
 def check_for_no_stories(source, browser):
@@ -58,12 +74,13 @@ def get_stories_from_search_page(url, source, browser):
         if source == 'gnw':
             # Wait until the bottom image element loads before reading in data.
             WebDriverWait(browser, timeout). \
-                until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div[2]/div/div[2]/div/div[2]/span')))
+                until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div[2]/div/div[2]/div[*]/div[1]/div[2]/span')))
             # Retrieve dates, title, desrciption, url from each story
-            date_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[*]/div/div[2]/div/span[1]')
-            title_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[*]/div/div[2]/a')
-            heading_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[*]/div/div[2]/span')
-            url_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[*]/div/div[2]/a')
+            date_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[2]/div[*]/div/div[2]/div/span[1]')
+            '/html/body/div[1]/div[2]/div/div[2]/div[*]/div/div[2]/div/span[1]'
+            title_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[2]/div[*]/div/div[2]/a')
+            heading_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[2]/div[*]/div/div[2]/span')
+            url_elems = browser.find_elements_by_xpath('/html/body/div[1]/div[2]/div/div[2]/div[*]/div/div[2]/a')
             source_long = 'Globe Newswire'
         # If the source is Business Wire, use another xpath to find elements
         elif source == 'bw':
@@ -100,6 +117,7 @@ def get_stories_from_search_page(url, source, browser):
         return output
 
     except (TimeoutException) as e:
+        print('TimeoutException')
         return None
 
 
@@ -138,23 +156,23 @@ def get_articles_from_keyword(search_term, num_articles, source, browser, start_
                 articles_retrieved = articles_retrieved + 1
                 output.append(story)
 
-            print("Finished results page " + str(page))
+            print("Finished results page " + str(page) + ' on ' + source)
             page = page + 1
         return output
     except:
         traceback.print_exc()
 
 
-def get_articles_and_data_from_keyword(search_term, num_articles, source, start_page=1):
+def get_articles_and_data_from_keyword(search_term, num_articles, source, start_page=1, filename=None):
     browser = initialize_browser()
     # article_list = get_articles_from_keyword(search_term, num_articles, source, browser, start_page)
-    filename_out = 'csvs/' + search_term + '_' + source + '_' + str(num_articles) + '.csv'
-    header = ['date', 'ticker', 'source', 'title', 'description', 'url', 'date_time_story', 'nltk_pos_minus_neg_title',
-              'nltk_pos_minus_neg_description', 'nltk_pos_minus_neg_article', 'nltk_compound_title',
-              'nltk_compound_description', 'nltk_compound_article', 'tb_polarity_title', 'tb_polarity_description',
-              'tb_polarity_article', 'stanza_sentiment_article', 'open_price', 'close_price', 'percent_change',
-              'max_percent_change', 'volume', 'average_volume']
-
+    if filename is None:
+        filename_out = 'csvs/' + search_term + '_' + source + '_' + str(num_articles) + '.csv'
+    else:
+        filename_out = filename
+    header = ['date', 'ticker', 'source', 'title', 'description', 'url', 'date_time_story', 'open_price',
+              'close_price', 'percent_change', 'max_percent_change', 'min_percent_change', 'volume', 'average_volume',
+              'tags', 'primary_sic_code', 'employees', 'shares_outstanding', 'marketcap_open']
     # Check if document exists
     if not os.path.isfile(filename_out):
         with open(filename_out, 'w') as csv_out:
@@ -182,42 +200,20 @@ def get_articles_and_data_from_keyword(search_term, num_articles, source, start_
             if articles_found is None:
                 break
 
-            # for story in articles_found:
-            #     articles_retrieved = articles_retrieved + 1
-            #     output.append(story)
-
             for news_story in articles_found:
                 try:
-                    articles_retrieved = articles_retrieved + 1
                     url = news_story.url
                     article_obj_and_text = pull_article(url)
                     article_date_time = article_obj_and_text['article_object'].date_time
                     article_ticker_objects = article_obj_and_text['article_object'].ticker_object_list
                     article_title = re.sub('\n', '', article_obj_and_text['article_object'].title.strip())
                     article_description = re.sub('\n', '', article_obj_and_text['article_object'].description.strip())
+                    article_description = re.sub('NBSP', ' ', article_description)
                     article_text = article_obj_and_text['article_text']
                     article_dt_str = article_date_time.strftime('%m/%d/%Y %H:%M')
 
-                    # If the article was after 4:30 or a weekend/holiday, it will apply to the next trading day's stock change
+                    # If the article was after 4:00 or a weekend/holiday, it will apply to the next trading day's stock change
                     article_stock_effect_date = date_article_reflected_in_stock(article_date_time)
-
-                    #  Sentiment analysis
-                    sentiments = get_sentiments(article_title, article_description, article_text)
-                    nltk_pos_minus_neg_title = sentiments["nltk_pos_minus_neg_title"]
-                    nltk_pos_minus_neg_description = sentiments["nltk_pos_minus_neg_description"]
-                    nltk_pos_minus_neg_article = sentiments["nltk_pos_minus_neg_article"]
-                    nltk_compound_title = sentiments["nltk_compound_title"]
-                    nltk_compound_description = sentiments["nltk_compound_description"]
-                    nltk_compound_article = sentiments["nltk_compound_article"]
-                    tb_polarity_title = sentiments["tb_polarity_title"]
-                    tb_polarity_description = sentiments["tb_polarity_description"]
-                    tb_polarity_article = sentiments["tb_polarity_article"]
-                    stanza_sentiment_article = sentiments["stanza_sentiment_article"]
-
-                    sentiments_list = [nltk_pos_minus_neg_title, nltk_pos_minus_neg_description, nltk_pos_minus_neg_article,
-                                       nltk_compound_title, nltk_compound_description, nltk_compound_article,
-                                       tb_polarity_title, tb_polarity_description, tb_polarity_article,
-                                       stanza_sentiment_article]
 
                     tickers_list = [ticker_object.ticker for ticker_object in article_ticker_objects]
                     for ticker in tickers_list:
@@ -227,19 +223,30 @@ def get_articles_and_data_from_keyword(search_term, num_articles, source, start_
                         close_price = stock_date_info['close_price']
                         percent_change = stock_date_info['percent_change']
                         max_percent_change = stock_date_info['max_percent_change']
+                        min_percent_change = stock_date_info['min_percent_change']
                         volume = stock_date_info['volume']
                         average_volume = get_average_volume(ticker)
 
-                        stock_data_list = [open_price, close_price, percent_change, max_percent_change, volume, average_volume]
+                        company_info = get_company_info_iex(ticker)
+                        tags = company_info['tags']
+                        sic_code = company_info['primary_sic_code']
+                        employees = company_info['employees']
+
+                        shares_outstanding = get_shares_outstanding(ticker)
+                        market_cap_open = shares_outstanding * open_price
+
+                        stock_data_list = [open_price, close_price, percent_change, max_percent_change,
+                                           min_percent_change, volume, average_volume, tags, sic_code, employees,
+                                           shares_outstanding, market_cap_open]
 
                         row = [article_stock_effect_date, ticker, source, article_title, article_description, url,
                                article_dt_str]
-                        row.extend(sentiments_list)
                         row.extend(stock_data_list)
 
                         with open(filename_out, 'a+') as csv_out:
                             csv_writer = csv.writer(csv_out)
                             csv_writer.writerow(row)
+                            articles_retrieved = articles_retrieved + 1
                             print("Wrote " + str(articles_retrieved) + " articles to file...")
 
                 except (IndexError, JSONDecodeError, TypeError):
@@ -249,25 +256,49 @@ def get_articles_and_data_from_keyword(search_term, num_articles, source, start_
         browser.quit()
 
     except:
+        page = page + 1
         traceback.print_exc()
+        return page
 
 
-fda_words = ['phase 1', 'phase 2', 'phase 3', 'phase i', 'phase ii', 'phase iii', 'phase 0',
-             'pharmaceuticals', 'therapeutics', 'medical']  # , 'fda']
-executive_words = ['ceo', 'cto', 'cfo', 'coo', 'chief', 'officer', 'board', 'president', 'director']
-announce_words = ['appoint', 'name', 'announce', 'promote', 'name', 'join']
+# fda_words = ['phase 1', 'phase 2', 'phase 3', 'phase i', 'phase ii', 'phase iii', 'phase 0',
+#              'pharmaceuticals', 'therapeutics', 'medical']  # , 'fda']
+# executive_words = ['ceo', 'cto', 'cfo', 'coo', 'chief', 'officer', 'board', 'president', 'director']
+# announce_words = ['appoint', 'name', 'announce', 'promote', 'join']
+#
+# search_terms = fda_words
+# for i in executive_words:
+#     for j in announce_words:
+#         executive_appointment_phrase = i + ' ' + j
+#         search_terms.append(executive_appointment_phrase)
+# print(search_terms)
 
-search_terms = fda_words
-for i in executive_words:
-    for j in announce_words:
-        executive_appointment_phrase = i + ' ' + j
-        search_terms.append(executive_appointment_phrase)
-print(search_terms)
+# for source in ['bw', 'gnw']:
+#     get_articles_and_data_from_keyword('fda', 300, source)
+#
+# for term in search_terms:
+#     for source in ['bw', 'gnw']:
+#         print('Searching for ' + term + ' from ' + source)
+#         get_articles_and_data_from_keyword(term, 50, source)
 
-for source in ['bw', 'gnw']:
-    get_articles_and_data_from_keyword('fda', 300, source)
+def loop_until_article_goal_achieved(search_term, articles_to_get, source, start_page=1, filename=None):
+    if filename is None:
+        filename_out = 'csvs/' + search_term + '_' + source + '_' + str(articles_to_get) + '.csv'
+    else:
+        filename_out = 'csvs/' + filename
 
-for term in search_terms:
-    for source in ['bw', 'gnw']:
-        print('Searching for ' + term + ' from ' + source)
-        get_articles_and_data_from_keyword(term, 50, source)
+    if not os.path.isfile(filename_out):
+        articles_already_gotten = 0
+        articles_left = articles_to_get
+    else:
+        with open(filename_out, 'r') as csv_in:
+            articles_already_gotten = len(csv_in.readlines())
+            articles_left = articles_to_get - articles_already_gotten
+            print('Articles left to get: ' + str(articles_left))
+
+    while articles_already_gotten < articles_to_get:
+        start_page = get_articles_and_data_from_keyword(search_term, articles_left, source, start_page, filename_out)
+
+
+# loop_until_article_goal_achieved('fda', 10000, 'gnw', 895)
+loop_until_article_goal_achieved('fda', 10000, 'bw', 2804)
